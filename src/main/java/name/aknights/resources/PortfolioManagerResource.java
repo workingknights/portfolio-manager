@@ -15,7 +15,7 @@ import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
 import java.util.List;
 
-@Path("/api/portfolio-manager")
+@Path("portfolio-manager")
 @Produces(MediaType.APPLICATION_JSON)
 public class PortfolioManagerResource {
 

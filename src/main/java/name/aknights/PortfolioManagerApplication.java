@@ -1,6 +1,7 @@
 package name.aknights;
 
 import io.dropwizard.Application;
+import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import name.aknights.resources.PortfolioManagerResource;
@@ -18,13 +19,15 @@ public class PortfolioManagerApplication extends Application<PortfolioManagerCon
 
     @Override
     public void initialize(final Bootstrap<PortfolioManagerConfiguration> bootstrap) {
-        // TODO: application initialization
+        bootstrap.addBundle( new AssetsBundle( "/assets/", "/", "index.html" ) );
     }
 
     @Override
     public void run(final PortfolioManagerConfiguration configuration,
                     final Environment environment) {
         final PortfolioManagerResource resource = new PortfolioManagerResource();
+
+        environment.jersey().setUrlPattern("/api/*");
 
         environment.jersey().register(resource);
     }
