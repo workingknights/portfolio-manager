@@ -31,7 +31,8 @@ public class PortfolioManagerResource {
         morphia.mapPackage("name.aknights.db");
 
         // create the Datastore connecting to the default port on the local host
-        datastore = morphia.createDatastore(new MongoClient(), "portfolio");
+        MongoClient mongoClient = new MongoClient("mongodb://heroku_n91f12d8:ct9drvuqreb10oc6gc3risge5q@ds127968.mlab.com:27968");
+        datastore = morphia.createDatastore(mongoClient, "heroku_n91f12d8");
         datastore.ensureIndexes();
     }
 
