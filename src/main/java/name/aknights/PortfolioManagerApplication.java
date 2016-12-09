@@ -19,7 +19,7 @@ public class PortfolioManagerApplication extends Application<PortfolioManagerCon
 
     @Override
     public void initialize(final Bootstrap<PortfolioManagerConfiguration> bootstrap) {
-        bootstrap.addBundle( new AssetsBundle( "/assets/", "/", "index.html" ) );
+        bootstrap.addBundle( new AssetsBundle( "/assets/", "/", "index.html") );
     }
 
     @Override
