@@ -1,0 +1,7 @@
+
+src/main/java/name/aknights/cli/
+src/main/java/name/aknights/client/
+src/main/java/name/aknights/core/
+src/main/java/name/aknights/health/
+src/test/
+target
