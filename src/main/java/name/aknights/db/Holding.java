@@ -12,6 +12,13 @@ public class Holding {
     private ObjectId id;
     private String symbol;
 
+    public Holding() {
+    }
+
+    public Holding(String symbol) {
+        this.symbol = symbol;
+    }
+
     public ObjectId getId() {
         return id;
     }

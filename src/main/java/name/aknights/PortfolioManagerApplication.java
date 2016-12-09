@@ -25,7 +25,8 @@ public class PortfolioManagerApplication extends Application<PortfolioManagerCon
     @Override
     public void run(final PortfolioManagerConfiguration configuration,
                     final Environment environment) {
-        final PortfolioManagerResource resource = new PortfolioManagerResource();
+        final PortfolioManagerResource resource =
+                new PortfolioManagerResource(configuration.getMongoDbUri(), configuration.getMongoDbName());
 
         environment.jersey().setUrlPattern("/api/*");
 

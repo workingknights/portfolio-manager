@@ -1,5 +1,6 @@
 package name.aknights.api;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.Length;
 
@@ -8,6 +9,9 @@ public class Holding {
 
     @Length(max = 6)
     private String symbol;
+
+    public Holding() {
+    }
 
     public Holding(String id, String symbol) {
         this.id = id;
@@ -22,5 +26,10 @@ public class Holding {
     @JsonProperty
     public String getSymbol() {
         return symbol;
+    }
+
+    @JsonProperty
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
     }
 }
