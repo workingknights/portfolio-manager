@@ -2,6 +2,8 @@ package name.aknights;
 
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
+import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
+import io.dropwizard.configuration.SubstitutingSourceProvider;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import name.aknights.resources.PortfolioManagerResource;
@@ -19,6 +21,12 @@ public class PortfolioManagerApplication extends Application<PortfolioManagerCon
 
     @Override
     public void initialize(final Bootstrap<PortfolioManagerConfiguration> bootstrap) {
+        // Enable variable substitution with environment variables
+        bootstrap.setConfigurationSourceProvider(
+                new SubstitutingSourceProvider(
+                        bootstrap.getConfigurationSourceProvider(),
+                        new EnvironmentVariableSubstitutor())
+        );
         bootstrap.addBundle( new AssetsBundle( "/assets/", "/", "index.html") );
     }
 
