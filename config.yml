@@ -1,14 +1,12 @@
-logging:
-  level: INFO
-  loggers:
-    name.aknights: DEBUG
-
 server:
   rootPath: '/api/'
 
-
-mongoDbUri: 'mongodb://heroku_n91f12d8:ct9drvuqreb10oc6gc3risge5q@ds127968.mlab.com:27968/heroku_n91f12d8'
-mongoDbName: 'heroku_n91f12d8'
+dbConfig:
+  host: ds127968.mlab.com
+  port: 27968
+  dbName: heroku_n91f12d8
+  user: heroku_n91f12d8
+  password: ${MONGODB_PASS}
 
 server:
   applicationConnectors:
@@ -17,3 +15,9 @@ server:
   adminConnectors:
     - type: http
       port: 8081
+
+
+logging:
+  level: INFO
+  loggers:
+    name.aknights: DEBUG

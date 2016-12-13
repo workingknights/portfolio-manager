@@ -4,6 +4,7 @@
     <div class="module holding">
       <h4>{{holding.symbol}}</h4>
     </div>
+    <button class="delete" (click)="delete(holding); $event.stopPropagation()">x</button>
   </a>
 </div>
 <div *ngIf="testStr">

@@ -19,4 +19,11 @@ export class DashboardComponent implements OnInit {
       .then(holdings => this.holdings = holdings);
   }
 
+  delete(holding: Holding): void {
+    this.holdingService
+    .delete(holding.id)
+    .then(() => {
+      this.holdings = this.holdings.filter(h => h != holding);
+    });
+  }
 }

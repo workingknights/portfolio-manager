@@ -1,35 +1,16 @@
 package name.aknights;
 
-import io.dropwizard.Configuration;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.validator.constraints.*;
-import javax.validation.constraints.*;
+import io.dropwizard.Configuration;
+
+import javax.validation.Valid;
 
 public class PortfolioManagerConfiguration extends Configuration {
-
-    @NotEmpty
-    private String mongoDbUri;
-
-    @NotEmpty
-    private String mongoDbName;
-
+    @Valid
     @JsonProperty
-    public String getMongoDbUri() {
-        return mongoDbUri;
-    }
+    private DbConfiguration dbConfig;
 
-    @JsonProperty
-    public void setMongoDbUri(String mongoDbUri) {
-        this.mongoDbUri = mongoDbUri;
-    }
-
-    @JsonProperty
-    public String getMongoDbName() {
-        return mongoDbName;
-    }
-
-    @JsonProperty
-    public void setMongoDbName(String mongoDbName) {
-        this.mongoDbName = mongoDbName;
+    public DbConfiguration getDbConfig() {
+        return dbConfig;
     }
 }

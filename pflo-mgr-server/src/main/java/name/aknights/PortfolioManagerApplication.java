@@ -6,7 +6,8 @@ import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
 import io.dropwizard.configuration.SubstitutingSourceProvider;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import name.aknights.resources.PortfolioManagerResource;
+import name.aknights.DaggerPortfolioManagerComponent;
+import name.aknights.db.MongoModule;
 
 public class PortfolioManagerApplication extends Application<PortfolioManagerConfiguration> {
 
@@ -27,18 +28,23 @@ public class PortfolioManagerApplication extends Application<PortfolioManagerCon
                         bootstrap.getConfigurationSourceProvider(),
                         new EnvironmentVariableSubstitutor())
         );
-        bootstrap.addBundle( new AssetsBundle( "/assets/", "/", "index.html") );
+        bootstrap.addBundle(new AssetsBundle( "/assets/", "/", "index.html") );
     }
 
     @Override
     public void run(final PortfolioManagerConfiguration configuration,
                     final Environment environment) {
-        final PortfolioManagerResource resource =
-                new PortfolioManagerResource(configuration.getMongoDbUri(), configuration.getMongoDbName());
+        PortfolioManagerComponent component = DaggerPortfolioManagerComponent.builder()
+                .mongoModule(new MongoModule(configuration.getDbConfig(), environment))
+                .build();
 
         environment.jersey().setUrlPattern("/api/*");
 
-        environment.jersey().register(resource);
+        environment.jersey().register(component.getHoldingsResource());
+
+        environment.healthChecks().register("MongoHealthCheck", component.getMongoHealthCheck());
+
+        component.getDatastore().ensureIndexes();
     }
 
 }

@@ -11,7 +11,7 @@ export class HoldingService {
   constructor(private http: Http) { }
 
   private headers = new Headers({'Content-Type': 'application/json'});
-  private holdingsUrl = '/api/portfolio-manager';
+  private holdingsUrl = 'api/holding';
 
   public getHoldings(): Promise<Holding[]> {
     return this.http.get(this.holdingsUrl)
@@ -30,6 +30,15 @@ export class HoldingService {
       .post(this.holdingsUrl, JSON.stringify(holding), {headers: this.headers})
       .toPromise()
       .then(res => res.json().data)
+      .catch(this.handleError);
+  }
+
+  public delete(id: String): Promise<void> {
+    const url = `${this.holdingsUrl}/${id}`;
+    return this.http
+      .delete(url, {headers: this.headers})
+      .toPromise()
+      .then(() => null)
       .catch(this.handleError);
   }
 
