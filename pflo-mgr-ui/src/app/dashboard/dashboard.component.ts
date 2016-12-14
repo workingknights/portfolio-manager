@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { Holding }        from '.././holding';
 import { HoldingService } from '.././holding.service';
 
+import { RouterModule, Routes } from '@angular/router';
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -15,6 +17,10 @@ export class DashboardComponent implements OnInit {
   constructor(private holdingService: HoldingService) { }
 
   public ngOnInit() {
+    this.refreshHoldingsList();
+  }
+
+  refreshHoldingsList() {
     this.holdingService.getHoldings()
       .then(holdings => this.holdings = holdings);
   }

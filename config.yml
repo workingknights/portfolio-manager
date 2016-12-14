@@ -8,6 +8,9 @@ dbConfig:
   user: heroku_n91f12d8
   password: ${MONGODB_PASS}
 
+yahooConfig:
+  apiUrl: http://query.yahooapis.com/v1/public/yql
+
 server:
   applicationConnectors:
     - type: http

@@ -42,14 +42,6 @@ export class HoldingService {
       .catch(this.handleError);
   }
 
-  // public create(symbol: string): Promise<Holding> {
-  //   return this.http
-  //     .post(this.holdingsUrl, JSON.stringify({symbol: symbol}), {headers: this.headers})
-  //     .toPromise()
-  //     .then(res => res.json().data)
-  //     .catch(this.handleError);
-  // }
-
   private handleError(error: any): Promise<any> {
     console.error('An error occurred', error); // for demo purposes only
     return Promise.reject(error.message || error);

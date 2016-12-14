@@ -6,7 +6,7 @@ import com.mongodb.ServerAddress;
 import dagger.Module;
 import dagger.Provides;
 import io.dropwizard.setup.Environment;
-import name.aknights.DbConfiguration;
+import name.aknights.config.DbConfiguration;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 

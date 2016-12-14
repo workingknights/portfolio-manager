@@ -6,7 +6,7 @@ import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
 import io.dropwizard.configuration.SubstitutingSourceProvider;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import name.aknights.DaggerPortfolioManagerComponent;
+import name.aknights.config.PortfolioManagerConfiguration;
 import name.aknights.db.MongoModule;
 
 public class PortfolioManagerApplication extends Application<PortfolioManagerConfiguration> {
@@ -34,13 +34,15 @@ public class PortfolioManagerApplication extends Application<PortfolioManagerCon
     @Override
     public void run(final PortfolioManagerConfiguration configuration,
                     final Environment environment) {
-        PortfolioManagerComponent component = DaggerPortfolioManagerComponent.builder()
+        PortfolioManagerComponent component = name.aknights.DaggerPortfolioManagerComponent.builder()
+                .portfolioManagerModule(new PortfolioManagerModule(configuration))
                 .mongoModule(new MongoModule(configuration.getDbConfig(), environment))
                 .build();
 
         environment.jersey().setUrlPattern("/api/*");
 
         environment.jersey().register(component.getHoldingsResource());
+        environment.jersey().register(component.getQuotesResource());
 
         environment.healthChecks().register("MongoHealthCheck", component.getMongoHealthCheck());
 

@@ -1,4 +1,4 @@
-package name.aknights;
+package name.aknights.config;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.NotEmpty;
