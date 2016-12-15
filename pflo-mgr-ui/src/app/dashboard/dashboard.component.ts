@@ -1,35 +1,30 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Holding }        from '.././holding';
-import { HoldingService } from '.././holding.service';
+
+import { PortfolioEntry } from '.././portfolioEntry';
+import { PortfolioService } from '.././portfolio.service';
 
 import { RouterModule, Routes } from '@angular/router';
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+    selector: 'app-dashboard',
+    templateUrl: './dashboard.component.html',
+    styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
 
-  public holdings: Holding[] = [];
+    public portfolioEntries: PortfolioEntry[] = [];
 
-  constructor(private holdingService: HoldingService) { }
+    constructor(private portfolioService: PortfolioService) {
+    }
 
-  public ngOnInit() {
-    this.refreshHoldingsList();
-  }
+    public ngOnInit() {
+        this.refreshPortfolio();
+    }
 
-  refreshHoldingsList() {
-    this.holdingService.getHoldings()
-      .then(holdings => this.holdings = holdings);
-  }
+    refreshPortfolio() {
+        this.portfolioService.getPortfolio()
+            .then(portfolioEntries => this.portfolioEntries = portfolioEntries);
+    }
 
-  delete(holding: Holding): void {
-    this.holdingService
-    .delete(holding.id)
-    .then(() => {
-      this.holdings = this.holdings.filter(h => h != holding);
-    });
-  }
 }

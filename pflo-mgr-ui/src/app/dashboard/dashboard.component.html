@@ -1,11 +1,11 @@
-<h3>Top Holdings</h3>
+<h3>Portfolio</h3>
 <div class="grid grid-pad">
-  <a *ngFor="let holding of holdings"  [routerLink]="['/detail', holding.id]"  class="col-1-4">
-    <div class="module holding">
-      <h4>{{holding.symbol}}</h4>
-    </div>
-    <button class="delete" (click)="delete(holding);">DEL</button>
-  </a>
+  <div *ngFor="let portfolioEntry of portfolioEntries"  [routerLink]="['/holding', portfolioEntry.holding.id]"
+  class="col-1-4">
+    <h4 class="module portfolioEntry">
+      <a>{{portfolioEntry.holding.symbol}}</a>  {{portfolioEntry.previousClose}}
+    </h4>
+  </div>
 </div>
 <div *ngIf="testStr">
   <label>Output is {{test}}</label>
