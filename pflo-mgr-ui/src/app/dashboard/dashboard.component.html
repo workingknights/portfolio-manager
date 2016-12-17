@@ -1,12 +1,46 @@
-<h3>Portfolio</h3>
-<div class="grid grid-pad">
-  <div *ngFor="let portfolioEntry of portfolioEntries"  [routerLink]="['/holding', portfolioEntry.holding.id]"
-  class="col-1-4">
-    <h4 class="module portfolioEntry">
-      <a>{{portfolioEntry.holding.symbol}}</a>  {{portfolioEntry.previousClose}}
-    </h4>
-  </div>
-</div>
-<div *ngIf="testStr">
-  <label>Output is {{test}}</label>
-</div>
+<!-- <div class="container"> -->
+	<!-- <div class="row">
+		<h3>Portfolio</h3>
+		<div class="grid grid-pad">
+		  <div *ngFor="let portfolioEntry of portfolioEntries"  [routerLink]="['/holding', portfolioEntry.holding.id]"
+		  class="col-1-4">
+		    <h4 class="module portfolioEntry">
+		      <a>{{portfolioEntry.holding.symbol}}</a>  {{portfolioEntry.previousClose}}
+		    </h4>
+		  </div>
+		</div>
+		<div *ngIf="testStr">
+		  <label>Output is {{test}}</label>
+		</div>
+	</div> -->
+
+	<div class="row">
+		<div class="col-sm-6">
+			<a class="nav" (click)="openAddHoldingForm()">Add Holding</a>
+			<div *ngIf="showAddHoldingForm">
+				<app-holding-form></app-holding-form>
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-sm-12">
+			<swui-datatable class="material"
+				[rows]="portfolioEntries"
+				[columnMode]="'flex'"
+				[rowHeight]="'auto'">
+				<swui-datatable-column name="Symbol" prop="holding.symbol" [flexGrow]="1">
+		          <template let-value="value" swui-datatable-cell-template>
+		            {{value}}
+		          </template>
+		        </swui-datatable-column>
+				<swui-datatable-column prop="currency" [flexGrow]="1"></swui-datatable-column>
+		        <swui-datatable-column name="Shares" prop="holding.shares" [flexGrow]="1"></swui-datatable-column>
+		        <swui-datatable-column prop="marketValue" [flexGrow]="1"></swui-datatable-column>
+		        <swui-datatable-column prop="previousClose" [flexGrow]="1"></swui-datatable-column>
+		        <swui-datatable-column prop="ma50Day" [flexGrow]="1"></swui-datatable-column>
+		        <swui-datatable-column prop="ma200Day" [flexGrow]="1"></swui-datatable-column>
+			</swui-datatable>
+		</div>
+	</div>
+<!-- </div> -->

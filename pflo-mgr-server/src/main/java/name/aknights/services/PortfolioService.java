@@ -1,37 +1,40 @@
 package name.aknights.services;
 
-import com.codahale.metrics.annotation.Timed;
+import name.aknights.api.PortfolioEntry;
 import name.aknights.core.quotes.QuoteDetail;
-import name.aknights.core.quotes.QuotesResponse;
-import name.aknights.config.YahooQuotesConfiguration;
+import name.aknights.db.Holding;
 
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
+import java.util.function.Function;
 
-public class QuotesService {
+import static java.util.stream.Collectors.toMap;
 
-    private Client client;
-    String apiUrl = "http://query.yahooapis.com/v1/public/yql";
+public class PortfolioService {
+
+    private final QuotesService quotesService;
+    private final HoldingsService holdingsService;
 
     @Inject
-    public QuotesService(Client client, YahooQuotesConfiguration yahooQuotesConfiguration) {
-        this.client = client;
-        this.apiUrl = yahooQuotesConfiguration.getApiUrl();
+    public PortfolioService(QuotesService quotesService, HoldingsService holdingsService) {
+        this.quotesService = quotesService;
+        this.holdingsService = holdingsService;
     }
 
-    @GET
-    @Timed
-    public Collection<QuoteDetail> allQuotes() {
-        QuotesResponse quotesData = client.target(apiUrl)
-                .queryParam("q", "select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20in%20%28%22VWO,GLD,SLV%22%29")
-                .queryParam("format", "json")
-                .queryParam("env", "store://datatables.org/alltableswithkeys")
-                .request(MediaType.APPLICATION_JSON)
-                .get(QuotesResponse.class);
+    public Collection<PortfolioEntry> allPortfolioEntries() {
 
-        return quotesData.getQuery().getResults().getQuote();
+        Map<String, Holding> holdings =
+                holdingsService.allHoldings().stream().collect(toMap(Holding::getSymbol, Function.identity()));
+
+        Collection<QuoteDetail> quotes = quotesService.getQuotes(holdings.keySet());
+
+        Collection<PortfolioEntry> entries = new ArrayList<>();
+
+        quotes.forEach(q -> entries.add(new PortfolioEntry(holdings.get(q.getSymbol()), q.getPreviousClose(), q.getOpen(),
+                q.getCurrency(), q.getAsk(), q.getMa50Day(), q.getMa200Day())));
+
+        return entries;
     }
 }

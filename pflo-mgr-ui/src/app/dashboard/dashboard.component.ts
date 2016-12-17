@@ -14,6 +14,7 @@ import { RouterModule, Routes } from '@angular/router';
 export class DashboardComponent implements OnInit {
 
     public portfolioEntries: PortfolioEntry[] = [];
+		private showAddHoldingForm = false;
 
     constructor(private portfolioService: PortfolioService) {
     }
@@ -27,4 +28,8 @@ export class DashboardComponent implements OnInit {
             .then(portfolioEntries => this.portfolioEntries = portfolioEntries);
     }
 
+		openAddHoldingForm() {
+			console.log("Hello");
+			this.showAddHoldingForm = true;
+		}
 }

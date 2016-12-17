@@ -32,8 +32,24 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class QuoteDetail {
     private String symbol;
+
     @JsonProperty("PreviousClose")
     private Double previousClose;
+
+    @JsonProperty("Open")
+    private Double open;
+
+    @JsonProperty("Currency")
+    private String currency;
+
+    @JsonProperty("Ask")
+    private Double ask;
+
+    @JsonProperty("FiftydayMovingAverage")
+    private Double ma50Day;
+
+    @JsonProperty("TwoHundreddayMovingAverage")
+    private Double ma200Day;
 
     public String getSymbol() {
         return symbol;
@@ -41,5 +57,25 @@ public class QuoteDetail {
 
     public Double getPreviousClose() {
         return previousClose;
+    }
+
+    public Double getOpen() {
+        return open;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public Double getAsk() {
+        return ask;
+    }
+
+    public Double getMa50Day() {
+        return ma50Day;
+    }
+
+    public Double getMa200Day() {
+        return ma200Day;
     }
 }

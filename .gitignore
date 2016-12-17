@@ -4,3 +4,4 @@ target
 node_modules
 /run_heroku_local.sh
 pflo-mgr-server/src/main/resources/assets
+/pflo-mgr-ui/dist/

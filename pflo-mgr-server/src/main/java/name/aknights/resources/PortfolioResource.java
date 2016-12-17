@@ -2,7 +2,7 @@ package name.aknights.resources;
 
 import com.codahale.metrics.annotation.Timed;
 import name.aknights.api.Data;
-import name.aknights.services.QuotesService;
+import name.aknights.services.PortfolioService;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -11,23 +11,22 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.Arrays;
 
-@Path("/quote")
+@Path("/portfolio")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class QuotesResource {
-    private QuotesService quotesService;
+public class PortfolioResource {
+    private PortfolioService portfolioService;
 
     @Inject
-    public QuotesResource(QuotesService quotesService) {
-        this.quotesService = quotesService;
+    public PortfolioResource(PortfolioService portfolioService) {
+        this.portfolioService = portfolioService;
     }
 
     @GET
     @Timed
     public Response listAll() {
-        Data data = new Data(quotesService.getQuotes(Arrays.asList("AAPL", "VWO", "VUSA.L")));
+        Data data = new Data(portfolioService.allPortfolioEntries());
         return Response.ok(data).build();
     }
 }

@@ -1,20 +1,22 @@
 package name.aknights.services;
 
-import com.codahale.metrics.annotation.Timed;
+import name.aknights.config.YahooQuotesConfiguration;
 import name.aknights.core.quotes.QuoteDetail;
 import name.aknights.core.quotes.QuotesResponse;
-import name.aknights.config.YahooQuotesConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import javax.ws.rs.GET;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.core.MediaType;
 import java.util.Collection;
 
 public class QuotesService {
 
+    Logger logger = LoggerFactory.getLogger(QuotesService.class);
+
     private Client client;
-    String apiUrl = "http://query.yahooapis.com/v1/public/yql";
+    private String apiUrl = "http://query.yahooapis.com/v1/public/yql";
 
     @Inject
     public QuotesService(Client client, YahooQuotesConfiguration yahooQuotesConfiguration) {
@@ -22,11 +24,16 @@ public class QuotesService {
         this.apiUrl = yahooQuotesConfiguration.getApiUrl();
     }
 
-    @GET
-    @Timed
-    public Collection<QuoteDetail> allQuotes() {
+    public Collection<QuoteDetail>  getQuotes(Collection<String> symbols) {
+        String origSymbolQueryParam = String.format("select * from yahoo.finance.quotes where symbol in (%s)", String.join(",", symbols));
+        String symbolQueryParam = origSymbolQueryParam.replace(" ", "%20");
+        symbolQueryParam = symbolQueryParam.replace("(", "%28%22");
+        symbolQueryParam = symbolQueryParam.replace(")", "%22%29");
+
+        if (logger.isDebugEnabled()) logger.debug("origSymbolQueryParam = {}, symbolQueryParam = {}", origSymbolQueryParam, symbolQueryParam);
+
         QuotesResponse quotesData = client.target(apiUrl)
-                .queryParam("q", "select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20in%20%28%22VWO,GLD,SLV%22%29")
+                .queryParam("q", symbolQueryParam)
                 .queryParam("format", "json")
                 .queryParam("env", "store://datatables.org/alltableswithkeys")
                 .request(MediaType.APPLICATION_JSON)
