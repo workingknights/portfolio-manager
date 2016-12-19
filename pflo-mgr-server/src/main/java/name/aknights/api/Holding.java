@@ -49,7 +49,7 @@ public class Holding {
 
     @JsonProperty
     public String getId() {
-        return id.toHexString();
+        return (id != null) ? id.toHexString() : "";
     }
 
     @JsonProperty
