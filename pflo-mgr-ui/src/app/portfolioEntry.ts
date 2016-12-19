@@ -9,15 +9,7 @@ export class PortfolioEntry {
         public currency: string,
         public ask: number,
         public ma50Day: number,
-        public ma200Day: number
-    ) { }
-
-    getMarketValue(): string {
-        return this.round(this.marketValue, 2).toFixed(2);
-    }
-
-	round(value, precision) {
-	    var multiplier = Math.pow(10, precision || 0);
-	    return Math.round(value * multiplier) / multiplier;
-	}
+        public ma200Day: number,
+				public totalPercentGain: number
+    ) {}
 }

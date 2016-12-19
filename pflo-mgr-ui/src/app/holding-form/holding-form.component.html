@@ -1,3 +1,34 @@
-<p>
-  holding-form works!
-</p>
+<div class="container">
+    <form (ngSubmit)="onSubmit()" #holdingForm="ngForm">
+      <div class="form-group">
+        <label for="symbol">Symbol</label>
+        <input type="text" class="form-control" id="symbol" required
+        [(ngModel)]="model.symbol" name="symbol" #symbol="ngModel">
+        <div [hidden]="symbol.valid || symbol.pristine" class="alert alert-danger">
+          Symbol is required
+        </div>
+      </div>
+			<div class="form-group">
+        <label for="tradeDate">Trade Date</label>
+        <input type="date" class="form-control" id="tradeDate" required
+        [(ngModel)]="model.tradeDate" name="tradeDate">
+      </div>
+      <div class="form-group">
+        <label for="shares">Shares</label>
+        <input type="number" min="1" step="1" class="form-control" id="shares" required
+        [(ngModel)]="model.shares" name="shares">
+      </div>
+      <div class="form-group">
+        <label for="tradePrice">Price</label>
+        <input type="number" min="0" step="any" class="form-control" id="tradePrice" required=""
+        [(ngModel)]="model.tradePrice" name="tradePrice">
+      </div>
+			<div class="form-group">
+        <label for="commission">Commission</label>
+        <input type="number" min="0" step="any" class="form-control" id="commission" required=""
+        [(ngModel)]="model.commission" name="commission">
+      </div>
+      <button type="button" class="btn btn-default" (click)="newHolding()">New Holding</button>
+      <button type="submit" class="btn btn-default" [disabled]="!holdingForm.form.valid">Submit</button>
+    </form>
+</div>

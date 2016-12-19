@@ -1,6 +1,7 @@
 package name.aknights.db;
 
 import com.mongodb.WriteResult;
+import name.aknights.api.Holding;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.dao.BasicDAO;

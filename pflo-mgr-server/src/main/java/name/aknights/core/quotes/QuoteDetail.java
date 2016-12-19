@@ -3,6 +3,8 @@ package name.aknights.core.quotes;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Optional;
+
 /**
  *          {
  *              "symbol":"VWO","Ask":null,"AverageDailyVolume":"16184400","Bid":null,"AskRealtime":null,"BidRealtime":null,"BookValue":"0.00",
@@ -51,12 +53,26 @@ public class QuoteDetail {
     @JsonProperty("TwoHundreddayMovingAverage")
     private Double ma200Day;
 
+    @JsonProperty("PercentChange")
+    private String percentChange;
+
+    public QuoteDetail() {
+    }
+
+    /*
+         * Used in tests
+         */
+    public QuoteDetail(String symbol, Double ask) {
+        this.symbol = symbol;
+        this.ask = ask;
+    }
+
     public String getSymbol() {
         return symbol;
     }
 
-    public Double getPreviousClose() {
-        return previousClose;
+    public Optional<Double> getPreviousClose() {
+        return Optional.ofNullable(previousClose);
     }
 
     public Double getOpen() {
@@ -67,8 +83,8 @@ public class QuoteDetail {
         return currency;
     }
 
-    public Double getAsk() {
-        return ask;
+    public Optional<Double> getAsk() {
+        return Optional.ofNullable(ask);
     }
 
     public Double getMa50Day() {
@@ -77,5 +93,9 @@ public class QuoteDetail {
 
     public Double getMa200Day() {
         return ma200Day;
+    }
+
+    public String getPercentChange() {
+        return percentChange;
     }
 }

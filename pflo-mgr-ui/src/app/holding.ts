@@ -3,7 +3,9 @@ export class Holding {
     public id: string,
     public symbol: string,
     public shares: number,
-    // public price: number
-    // public tradeDate: string;
+    public tradePrice: number,
+		public commission: number,
+    public tradeDate: any,
+		public initialMarketValue: number
   ) { }
 }

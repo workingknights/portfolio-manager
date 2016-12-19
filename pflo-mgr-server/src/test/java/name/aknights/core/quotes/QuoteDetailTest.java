@@ -16,7 +16,7 @@ public class QuoteDetailTest {
         QuoteDetail quoteDetail = mapper.readValue(jsonString, QuoteDetail.class);
 
         assertEquals("VWO", quoteDetail.getSymbol());
-        assertEquals(36.40, quoteDetail.getPreviousClose(), 0.0);
+        assertEquals(36.40, quoteDetail.getPreviousClose().get(), 0.0);
     }
 
 

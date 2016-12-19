@@ -1,6 +1,6 @@
 package name.aknights.services;
 
-import name.aknights.db.Holding;
+import name.aknights.api.Holding;
 import name.aknights.db.HoldingDAO;
 
 import javax.inject.Inject;

@@ -2,8 +2,10 @@ package name.aknights.resources;
 
 import com.codahale.metrics.annotation.Timed;
 import name.aknights.api.Data;
-import name.aknights.db.Holding;
+import name.aknights.api.Holding;
 import name.aknights.services.HoldingsService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
@@ -17,6 +19,7 @@ import javax.ws.rs.core.UriBuilder;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class HoldingsResource {
+    private static final Logger logger = LoggerFactory.getLogger(HoldingsResource.class);
 
     private HoldingsService holdingsService;
 
@@ -35,6 +38,7 @@ public class HoldingsResource {
     @Timed
     public Response add(@NotNull @Valid Holding newHolding) {
         Object id = holdingsService.addNewHolding(newHolding);
+        logger.debug("add() - newHolding = {}, id = {}", newHolding, id);
         return Response.created(UriBuilder.fromResource(HoldingsResource.class).build(id)).build();
     }
 

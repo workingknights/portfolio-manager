@@ -29,7 +29,6 @@ export class DashboardComponent implements OnInit {
     }
 
 		openAddHoldingForm() {
-			console.log("Hello");
 			this.showAddHoldingForm = true;
 		}
 }

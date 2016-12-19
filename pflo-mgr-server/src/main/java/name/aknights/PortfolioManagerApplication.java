@@ -45,6 +45,8 @@ public class PortfolioManagerApplication extends Application<PortfolioManagerCon
         environment.jersey().register(component.getQuotesResource());
         environment.jersey().register(component.getPortfolioResource());
 
+        environment.jersey().register(LogRequestFeature.class);
+
         environment.healthChecks().register("MongoHealthCheck", component.getMongoHealthCheck());
 
         component.getDatastore().ensureIndexes();

@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.core.MediaType;
 import java.util.Collection;
+import java.util.Optional;
 
 public class QuotesService {
 
@@ -24,21 +25,37 @@ public class QuotesService {
         this.apiUrl = yahooQuotesConfiguration.getApiUrl();
     }
 
-    public Collection<QuoteDetail>  getQuotes(Collection<String> symbols) {
-        String origSymbolQueryParam = String.format("select * from yahoo.finance.quotes where symbol in (%s)", String.join(",", symbols));
+    public Collection<QuoteDetail> getQuotes(Collection<String> tickers) {
+        String origSymbolQueryParam = String.format("select * from yahoo.finance.quotes where symbol in (%s)", String.join(",", tickers));
         String symbolQueryParam = origSymbolQueryParam.replace(" ", "%20");
         symbolQueryParam = symbolQueryParam.replace("(", "%28%22");
         symbolQueryParam = symbolQueryParam.replace(")", "%22%29");
 
         if (logger.isDebugEnabled()) logger.debug("origSymbolQueryParam = {}, symbolQueryParam = {}", origSymbolQueryParam, symbolQueryParam);
 
-        QuotesResponse quotesData = client.target(apiUrl)
-                .queryParam("q", symbolQueryParam)
-                .queryParam("format", "json")
-                .queryParam("env", "store://datatables.org/alltableswithkeys")
-                .request(MediaType.APPLICATION_JSON)
-                .get(QuotesResponse.class);
+        QuotesResponse quotesData = getQuotesResponse(symbolQueryParam);
 
         return quotesData.getQuery().getResults().getQuote();
+    }
+
+    private QuotesResponse getQuotesResponse(String symbolQueryParam) {
+        return client.target(apiUrl)
+                    .queryParam("q", symbolQueryParam)
+                    .queryParam("format", "json")
+                    .queryParam("env", "store://datatables.org/alltableswithkeys")
+                    .request(MediaType.APPLICATION_JSON)
+                    .get(QuotesResponse.class);
+    }
+
+    public Optional<QuoteDetail> getQuote(String ticker) {
+        String origSymbolQueryParam = String.format("select * from yahoo.finance.quotes where symbol = %s", ticker);
+        String symbolQueryParam = origSymbolQueryParam.replace(" ", "%20");
+
+        if (logger.isDebugEnabled()) logger.debug("origSymbolQueryParam = {}, symbolQueryParam = {}", origSymbolQueryParam, symbolQueryParam);
+
+        QuotesResponse quotesData = getQuotesResponse(symbolQueryParam);
+
+        return quotesData.getQuery().getResults().getQuote().stream().findFirst();
+//        return quotesData.getQuery().getResults().getQuote().stream().findFirst().orElseThrow(() -> new QuoteNotFoundException(ticker));
     }
 }

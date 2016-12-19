@@ -1,16 +1,20 @@
 package name.aknights.api;
 
-import name.aknights.db.Holding;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.math.BigDecimal;
 
 public class PortfolioEntry {
     private static final Logger logger = LoggerFactory.getLogger(PortfolioEntry.class);
 
-    private Holding holding;
+    private String symbol;
+    private Integer totalShares;
     private Double previousClose;
     private Double open;
     private String percentChange;
+    private Double marketValue;
+    private BigDecimal totalPercentGain;
     private String change;
     private String currency;
     private Double yearLow;
@@ -28,20 +32,22 @@ public class PortfolioEntry {
     public PortfolioEntry() {
     }
 
-    public PortfolioEntry(Holding holding, Double previousClose, Double open, String currency, Double ask,
-                          Double ma50Day, Double ma200Day
-//                          String percentChange, String change, Double yearLow, Double yearHigh, Double changeFromYearLow,
+    public PortfolioEntry(String symbol, Integer totalShares, Double previousClose, Double open, String currency, Double ask,
+                          Double ma50Day, Double ma200Day, String percentChange, Double marketValue, BigDecimal totalPercentGain
+//                          String change, Double yearLow, Double yearHigh, Double changeFromYearLow,
 //                          String percentChangeFromYearLow, Double changeFromYearHigh, String percentChangeFromYearHigh,
 //         String percentChangeFrom50DayMA, String percentChangeFrom200DayMA
  ) {
-        this.holding = holding;
+        this.symbol = symbol;
+        this.totalShares = totalShares;
         this.previousClose = previousClose;
         this.open = open;
         this.currency = currency;
         this.ask = ask;
         this.ma50Day = ma50Day;
         this.ma200Day = ma200Day;
-//        this.percentChange = percentChange;
+        this.percentChange = percentChange;
+        this.marketValue = marketValue;
 //        this.change = change;
 //        this.yearLow = yearLow;
 //        this.yearHigh = yearHigh;
@@ -51,10 +57,15 @@ public class PortfolioEntry {
 //        this.percentChangeFromYearHigh = percentChangeFromYearHigh;
 //        this.percentChangeFrom50DayMA = percentChangeFrom50DayMA;
 //        this.percentChangeFrom200DayMA = percentChangeFrom200DayMA;
+        this.totalPercentGain = totalPercentGain;
     }
 
-    public Holding getHolding() {
-        return holding;
+    public String getSymbol() {
+        return symbol;
+    }
+
+    public Integer getTotalShares() {
+        return totalShares;
     }
 
     public Double getPreviousClose() {
@@ -102,13 +113,7 @@ public class PortfolioEntry {
     }
 
     public Double getMarketValue() {
-         Double mv = new Double("0");
-         try {
-             mv = ((null==getHolding()) ? 0 : getHolding().getShares()) * getAsk();
-         } catch (Throwable t) {
-             logger.warn("getMarketValue() - could not calculate market value, throwable {}", t);
-         }
-         return mv;
+         return marketValue;
     }
 
     public Double getAsk() {
@@ -129,5 +134,9 @@ public class PortfolioEntry {
 
     public String getPercentChangeFrom200DayMA() {
         return percentChangeFrom200DayMA;
+    }
+
+    public BigDecimal getTotalPercentGain() {
+        return totalPercentGain;
     }
 }

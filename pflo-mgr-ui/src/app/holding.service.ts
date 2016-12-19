@@ -25,11 +25,13 @@ export class HoldingService {
             .then(holdings => holdings.find(holding => holding.id === id));
     }
 
-    public create(holding: Holding): Promise<Holding> {
+    public create(holding: Holding): Promise<void> {
+			holding.id = "";
+			console.log('create() json=' + JSON.stringify(holding));
         return this.http
             .post(this.holdingsUrl, JSON.stringify(holding), { headers: this.headers })
             .toPromise()
-            .then(res => res.json().data)
+            .then(() => null)
             .catch(this.handleError);
     }
 
