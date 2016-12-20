@@ -32,6 +32,11 @@
 					{{value.toFixed(2)}}
 				</template>
 			</swui-datatable-column>
+			<swui-datatable-column prop="initialMarketValueBase" [flexGrow]="1.5">
+				<template let-value="value" swui-datatable-cell-template>
+					{{value.toFixed(2)}}
+				</template>
+			</swui-datatable-column>
 		</swui-datatable>
 	</div>
 </div>

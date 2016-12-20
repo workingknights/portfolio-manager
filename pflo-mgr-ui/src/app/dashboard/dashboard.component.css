@@ -40,6 +40,12 @@ a.nav {
 	font-size: 12px;
 	margin-top:18px;
 }
+.redCell {
+	color: red;
+}
+.greenCell {
+	color: green;
+}
 
 /*.module {
   padding: 20px;

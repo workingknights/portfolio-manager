@@ -18,44 +18,53 @@
 		<!-- <div class="col-sm-2">
 			<a class="nav" [routerLink]="['/holdings']">Show Holdings</a>
 		</div> -->
-		<div class="col-sm-3">
+		<div class="col-sm-12">
 			<a class="nav" (click)="openAddHoldingForm()">Add Holding</a>
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-sm-8">
+		<div class="col-sm-12">
 			<div *ngIf="showAddHoldingForm">
-				<app-holding-form></app-holding-form>
+				<app-holding-form (added)="refreshPortfolio($event)" (closed)="showAddHoldingForm=false"></app-holding-form>
 			</div>
 		</div>
 	</div>
 
 	<div class="row">
 		<div class="col-sm-12">
-			<swui-datatable class="material"
+			<swui-datatable
 				[rows]="portfolioEntries"
 				[columnMode]="'flex'"
-				[rowHeight]="'auto'">
-				<swui-datatable-column prop="symbol" [flexGrow]="1">
-          <template let-value="value" swui-datatable-cell-template>
-            {{value}}
-          </template>
-        </swui-datatable-column>
-				<swui-datatable-column prop="currency" [flexGrow]="1"></swui-datatable-column>
+				[rowHeight]="'auto'"
+				class="material">
+				<swui-datatable-column prop="symbol" [flexGrow]="1"></swui-datatable-column>
         <swui-datatable-column name="Shares" prop="totalShares" [flexGrow]="1"></swui-datatable-column>
-        <swui-datatable-column name="Curr Price" prop="ask" [flexGrow]="1"></swui-datatable-column>
-				<swui-datatable-column prop="previousClose" [flexGrow]="1.2"></swui-datatable-column>
-        <swui-datatable-column prop="marketValue" [flexGrow]="1" >
+        <swui-datatable-column name="Curr Price" prop="currPrice" [flexGrow]="1.3"></swui-datatable-column>
+				<swui-datatable-column name="Prev Close" prop="previousClose" [flexGrow]="1.4"></swui-datatable-column>
+				<swui-datatable-column name="% Change" prop="percentChange" [flexGrow]="1.3">
+					<template let-value="value" swui-datatable-cell-template>
+						<span [ngClass]="{greenCell: value.startsWith('+'), redCell: value.startsWith('-')}">{{value}}</span>
+					</template>
+				</swui-datatable-column>
+        <swui-datatable-column prop="marketValue" [flexGrow]="1.6" >
 					<template let-value="value" swui-datatable-cell-template>
 						{{value.toFixed(2)}}
 					</template>
 				</swui-datatable-column>
-        <swui-datatable-column name="50 Day MA" prop="ma50Day" [flexGrow]="1"></swui-datatable-column>
-        <swui-datatable-column name="200 Day MA" prop="ma200Day" [flexGrow]="1"></swui-datatable-column>
-        <swui-datatable-column prop="totalPercentGain" [flexGrow]="1.4">
+				<swui-datatable-column name="Total % Gain" prop="totalPercentGain" [flexGrow]="1.5">
 					<template let-value="value" swui-datatable-cell-template>
-						{{value | percent:'1.2-2'}}
-					</template></swui-datatable-column>
+						<span [ngClass]="{greenCell: value > 0, redCell: value < 0}">{{value | percent:'1.2-2'}}</span>
+					</template>
+				</swui-datatable-column>
+				<swui-datatable-column prop="totalGain" [flexGrow]="1.3">
+					<template let-value="value" swui-datatable-cell-template>
+						<span [ngClass]="{greenCell: value > 0, redCell: value < 0}">{{value.toFixed(2)}}</span>
+					</template>
+				</swui-datatable-column>
+        <swui-datatable-column name="50 Day MA" prop="ma50Day" [flexGrow]="1.4"></swui-datatable-column>
+        <swui-datatable-column name="200 Day MA" prop="ma200Day" [flexGrow]="1.5"></swui-datatable-column>
+        <swui-datatable-column prop="yearLow" [flexGrow]="1.2"></swui-datatable-column>
+        <swui-datatable-column prop="yearHigh" [flexGrow]="1.3"></swui-datatable-column>
 			</swui-datatable>
 		</div>
 	</div>

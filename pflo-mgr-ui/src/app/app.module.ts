@@ -14,27 +14,25 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { HoldingService } from './holding.service';
 import { PortfolioService } from './portfolio.service';
 import { HoldingsComponent } from './holdings/holdings.component';
-import { HoldingDetailComponent } from './holding-detail/holding-detail.component';
 import { HoldingFormComponent } from './holding-form/holding-form.component';
 
 @NgModule({
-    declarations: [
-        AppComponent,
-        DashboardComponent,
-        HoldingsComponent,
-        HoldingDetailComponent,
-        HoldingFormComponent,
-    ],
-    imports: [
-        BrowserModule,
-        FormsModule,
-        HttpModule,
-        AppRoutingModule,
-		Angular2DataTableModule,
-		NgbModule.forRoot(),
-    ],
-    providers: [HoldingService,
-        		PortfolioService],
-    bootstrap: [AppComponent]
+  declarations: [
+    AppComponent,
+    DashboardComponent,
+    HoldingsComponent,
+    HoldingFormComponent,
+  ],
+  imports: [
+    BrowserModule,
+    FormsModule,
+    HttpModule,
+    AppRoutingModule,
+    Angular2DataTableModule,
+    NgbModule.forRoot(),
+  ],
+  providers: [HoldingService,
+    PortfolioService],
+  bootstrap: [AppComponent]
 })
 export class AppModule { }

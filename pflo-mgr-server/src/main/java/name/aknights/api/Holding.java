@@ -7,6 +7,7 @@ import org.mongodb.morphia.annotations.*;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity("holdings")
@@ -33,6 +34,12 @@ public class Holding {
     private Double commission;
 
     private Double initialMarketValue;
+
+    @NotSaved
+    private BigDecimal initialMarketValueBase;
+
+    @NotSaved
+    private String currency;
 
     public Holding() {
     }
@@ -128,6 +135,27 @@ public class Holding {
                 ", tradePrice=" + tradePrice +
                 ", commission=" + commission +
                 ", initialMarketValue=" + getInitialMarketValue() +
+                ", initialMarketValueBase=" + getInitialMarketValueBase() +
                 '}';
+    }
+
+    @JsonProperty
+    public void setInitialMarketValueBase(BigDecimal initialMarketValueBase) {
+        this.initialMarketValueBase = initialMarketValueBase;
+    }
+
+    @JsonProperty
+    public BigDecimal getInitialMarketValueBase() {
+        return initialMarketValueBase;
+    }
+
+    @JsonProperty
+    public String getCurrency() {
+        return currency;
+    }
+
+    @JsonProperty
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 }

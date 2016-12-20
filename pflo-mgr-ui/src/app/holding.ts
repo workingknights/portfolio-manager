@@ -6,6 +6,8 @@ export class Holding {
     public tradePrice: number,
 		public commission: number,
     public tradeDate: any,
-		public initialMarketValue: number
+		public initialMarketValue: number,
+		public initialMarketValueBase: number,
+		public currency: string
   ) { }
 }

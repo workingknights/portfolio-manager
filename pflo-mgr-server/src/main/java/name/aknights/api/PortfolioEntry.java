@@ -13,9 +13,9 @@ public class PortfolioEntry {
     private Double previousClose;
     private Double open;
     private String percentChange;
-    private Double marketValue;
+    private BigDecimal marketValue;
     private BigDecimal totalPercentGain;
-    private String change;
+    private BigDecimal totalGain;
     private String currency;
     private Double yearLow;
     private Double yearHigh;
@@ -23,7 +23,7 @@ public class PortfolioEntry {
     private String percentChangeFromYearLow;
     private Double changeFromYearHigh;
     private String percentChangeFromYearHigh;
-    private Double ask;
+    private BigDecimal currPrice;
     private Double ma50Day;
     private Double ma200Day;
     private String percentChangeFrom50DayMA;
@@ -32,18 +32,19 @@ public class PortfolioEntry {
     public PortfolioEntry() {
     }
 
-    public PortfolioEntry(String symbol, Integer totalShares, Double previousClose, Double open, String currency, Double ask,
-                          Double ma50Day, Double ma200Day, String percentChange, Double marketValue, BigDecimal totalPercentGain
-//                          String change, Double yearLow, Double yearHigh, Double changeFromYearLow,
+    public PortfolioEntry(String symbol, Integer totalShares, Double previousClose, Double open, String currency, BigDecimal currPrice,
+                          Double ma50Day, Double ma200Day, String percentChange, BigDecimal marketValue, BigDecimal totalPercentGain,
+                          BigDecimal totalGain, Double yearLow, Double yearHigh
+                          //Double changeFromYearLow,
 //                          String percentChangeFromYearLow, Double changeFromYearHigh, String percentChangeFromYearHigh,
 //         String percentChangeFrom50DayMA, String percentChangeFrom200DayMA
- ) {
+    ) {
         this.symbol = symbol;
         this.totalShares = totalShares;
         this.previousClose = previousClose;
         this.open = open;
         this.currency = currency;
-        this.ask = ask;
+        this.currPrice = currPrice;
         this.ma50Day = ma50Day;
         this.ma200Day = ma200Day;
         this.percentChange = percentChange;
@@ -58,6 +59,9 @@ public class PortfolioEntry {
 //        this.percentChangeFrom50DayMA = percentChangeFrom50DayMA;
 //        this.percentChangeFrom200DayMA = percentChangeFrom200DayMA;
         this.totalPercentGain = totalPercentGain;
+        this.totalGain = totalGain;
+        this.yearLow = yearLow;
+        this.yearHigh = yearHigh;
     }
 
     public String getSymbol() {
@@ -78,10 +82,6 @@ public class PortfolioEntry {
 
     public String getPercentChange() {
         return percentChange;
-    }
-
-    public String getChange() {
-        return change;
     }
 
     public String getCurrency() {
@@ -112,12 +112,12 @@ public class PortfolioEntry {
         return percentChangeFromYearHigh;
     }
 
-    public Double getMarketValue() {
+    public BigDecimal getMarketValue() {
          return marketValue;
     }
 
-    public Double getAsk() {
-        return ask;
+    public BigDecimal getCurrPrice() {
+        return currPrice;
     }
 
     public Double getMa50Day() {
@@ -138,5 +138,9 @@ public class PortfolioEntry {
 
     public BigDecimal getTotalPercentGain() {
         return totalPercentGain;
+    }
+
+    public BigDecimal getTotalGain() {
+        return totalGain;
     }
 }

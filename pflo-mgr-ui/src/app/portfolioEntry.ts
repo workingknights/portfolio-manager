@@ -10,6 +10,10 @@ export class PortfolioEntry {
         public ask: number,
         public ma50Day: number,
         public ma200Day: number,
-				public totalPercentGain: number
+				public totalPercentGain: number,
+				public totalGain: number,
+				public yearLow: number,
+				public yearHigh: number,
+				public percentChange: string
     ) {}
 }

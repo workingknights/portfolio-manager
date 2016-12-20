@@ -8,7 +8,6 @@ import { HoldingDetailComponent } from './holding-detail/holding-detail.componen
 const routes: Routes = [
   { path: '', component: DashboardComponent },
   { path: 'holdings', component: HoldingsComponent },
-  { path: 'holding/:id', component: HoldingDetailComponent },
 ];
 
 @NgModule({
