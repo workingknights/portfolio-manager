@@ -1,8 +1,7 @@
-import { Holding } from './holding';
-
 export class PortfolioEntry {
     constructor(
-        public holding: Holding,
+        public symbol: string,
+				public totalShares: number,
         public previousClose: number,
         public marketValue: number,
         public open: number,
@@ -14,6 +13,8 @@ export class PortfolioEntry {
 				public totalGain: number,
 				public yearLow: number,
 				public yearHigh: number,
-				public percentChange: string
+				public percentChange: number,
+				public dailyGain: number,
+				public recommendation: string
     ) {}
 }

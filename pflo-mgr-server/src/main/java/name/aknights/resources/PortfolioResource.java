@@ -25,8 +25,8 @@ public class PortfolioResource {
 
     @GET
     @Timed
-    public Response listAll() {
-        Data data = new Data(portfolioService.allPortfolioEntries());
-        return Response.ok(data).build();
+    public Response getPortfolio() {
+//        Data data = new Data(portfolioService.getPortfolio());
+        return Response.ok(portfolioService.getPortfolio()).build();
     }
 }

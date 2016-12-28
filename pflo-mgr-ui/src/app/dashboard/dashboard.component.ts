@@ -14,6 +14,7 @@ import { RouterModule, Routes } from '@angular/router';
 export class DashboardComponent implements OnInit {
 
   public portfolioEntries: PortfolioEntry[] = [];
+  public summary: PortfolioEntry[] = [];
   private showAddHoldingForm = false;
 
   constructor(private portfolioService: PortfolioService, private appRef: ApplicationRef) {
@@ -30,7 +31,11 @@ export class DashboardComponent implements OnInit {
   refreshPortfolio() {
     console.log('refreshing portfolio');
     this.portfolioService.getPortfolio()
-      .then(portfolioEntries => this.portfolioEntries = portfolioEntries);
+      .then(portfolio => {
+				this.portfolioEntries = portfolio.entries;
+				this.summary = [portfolio.summary];
+			}
+			);
 
     this.appRef.tick;
   }

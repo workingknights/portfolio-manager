@@ -2,8 +2,8 @@ package name.aknights.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 public class Data<T> {
     private Collection<T> data;
@@ -12,8 +12,14 @@ public class Data<T> {
         this.data = payload;
     }
 
+    public Data(T payload) {
+        this.data = new ArrayList<>();
+        data.add(payload);
+    }
+
     @JsonProperty
     public Collection<T> getData() {
         return data;
     }
+
 }

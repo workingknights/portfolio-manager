@@ -10,6 +10,22 @@ import static org.junit.Assert.assertEquals;
 public class QuoteDetailTest {
 
     @Test
+    public void withPositivePercentChangeStringsTheNumericValuesArePositive() {
+        QuoteDetail quoteDetail = new QuoteDetail("+5.0%", "+2.5%", "+6.23%");
+        assertEquals(0.05, quoteDetail.getPercentChange(), 0.0);
+        assertEquals(2.5, quoteDetail.getPercentChangeFromYearLow(), 0.0);
+        assertEquals(6.23, quoteDetail.getPercentChangeFromYearHigh(), 0.0);
+    }
+
+    @Test
+    public void withNegativePercentChangeStringsTheNumericValuesAreNegative() {
+        QuoteDetail quoteDetail = new QuoteDetail("-4.0%", "-3.75%", "-11.1%");
+        assertEquals(-0.04, quoteDetail.getPercentChange(), 0.0);
+        assertEquals(-3.75, quoteDetail.getPercentChangeFromYearLow(), 0.0);
+        assertEquals(-11.1, quoteDetail.getPercentChangeFromYearHigh(), 0.0);
+    }
+
+    @Test
     public void isCreatedIfJsonIsValid() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
 

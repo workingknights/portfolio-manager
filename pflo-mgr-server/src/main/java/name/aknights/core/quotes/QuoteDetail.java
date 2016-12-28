@@ -59,11 +59,20 @@ public class QuoteDetail {
     @JsonProperty("PercentChange")
     private String percentChange;
 
+    @JsonProperty("Change")
+    private String change;
+
     @JsonProperty("YearLow")
     private Double yearLow;
 
     @JsonProperty("YearHigh")
     private Double yearHigh;
+
+    @JsonProperty("PercentChangeFromYearLow")
+    private String percentChangeFromYearLow;
+
+    @JsonProperty("PercebtChangeFromYearHigh")
+    private String percentChangeFromYearHigh;
 
     public QuoteDetail() {
     }
@@ -74,6 +83,12 @@ public class QuoteDetail {
     public QuoteDetail(String symbol, Double lastTradePrice) {
         this.symbol = symbol;
         this.lastTradePrice = lastTradePrice;
+    }
+
+    public QuoteDetail(String percentChange, String percentChangeFromYearLow, String percentChangeFromYearHigh) {
+        this.percentChange = percentChange;
+        this.percentChangeFromYearLow = percentChangeFromYearLow;
+        this.percentChangeFromYearHigh = percentChangeFromYearHigh;
     }
 
     public String getSymbol() {
@@ -104,8 +119,18 @@ public class QuoteDetail {
         return ma200Day;
     }
 
-    public String getPercentChange() {
-        return percentChange;
+    public Double getPercentChange() {
+        if (percentChange.startsWith("+"))
+            return Double.parseDouble(percentChange.substring(1, percentChange.length()-1))/100;
+        else
+            return Double.parseDouble(percentChange.substring(0, percentChange.length()-1))/100;
+    }
+
+    public Double getChange() {
+        if (change.startsWith("+"))
+            return Double.parseDouble(change.substring(1, change.length()));
+        else
+            return Double.parseDouble(change.substring(0, change.length()));
     }
 
     public Double getLastTradePrice() {
@@ -118,5 +143,19 @@ public class QuoteDetail {
 
     public Double getYearHigh() {
         return yearHigh;
+    }
+
+    public Double getPercentChangeFromYearLow() {
+        if (percentChangeFromYearLow.startsWith("+"))
+            return Double.parseDouble(percentChangeFromYearLow.substring(1, percentChangeFromYearLow.length()-1));
+        else
+            return Double.parseDouble(percentChangeFromYearLow.substring(0, percentChangeFromYearLow.length()-1));
+    }
+
+    public Double getPercentChangeFromYearHigh() {
+        if (percentChangeFromYearHigh.startsWith("+"))
+            return Double.parseDouble(percentChangeFromYearHigh.substring(1, percentChangeFromYearHigh.length()-1));
+        else
+            return Double.parseDouble(percentChangeFromYearHigh.substring(0, percentChangeFromYearHigh.length()-1));
     }
 }

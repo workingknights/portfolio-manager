@@ -91,8 +91,12 @@ public class Holding {
 
     @JsonProperty
     public Double getInitialMarketValue() {
-//        return this.initialMarketValue;
-        return (shares * tradePrice) - ((commission != null) ? commission : 0.0);
+        return (shares * tradePrice);
+    }
+
+    @JsonProperty
+    public Double getCost() {
+        return getInitialMarketValue() - ((commission != null) ? commission : 0.0);
     }
 
     @JsonProperty

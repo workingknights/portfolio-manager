@@ -24,11 +24,11 @@ public class HoldingTest {
         Holding holding = mapper.readValue(json, Holding.class);
 
         assertNotNull(holding);
-        assertEquals(145.75, holding.getInitialMarketValue(), 0.0);
+        assertEquals(146.0, holding.getInitialMarketValue(), 0.0);
 
         String outputJson = mapper.writeValueAsString(holding);
         assertNotNull(outputJson);
-        assertTrue(outputJson.contains("initialMarketValue\":145.75"));
+        assertTrue(outputJson.contains("initialMarketValue\":146.0"));
     }
 
 }

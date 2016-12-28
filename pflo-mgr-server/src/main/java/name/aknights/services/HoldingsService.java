@@ -3,6 +3,8 @@ package name.aknights.services;
 import name.aknights.api.Holding;
 import name.aknights.core.quotes.QuoteDetail;
 import name.aknights.db.HoldingDAO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.math.BigDecimal;
@@ -17,6 +19,8 @@ import static java.util.stream.Collectors.groupingBy;
 
 public class HoldingsService {
 
+    private static final Logger logger = LoggerFactory.getLogger(HoldingsService.class);
+
     private HoldingDAO holdingDAO;
     private QuotesService quotesService;
 
@@ -27,6 +31,7 @@ public class HoldingsService {
     }
 
     public Collection<Holding> allHoldings() {
+        if (logger.isDebugEnabled()) logger.debug("allHoldings()");
 
         Collection<Holding> holdings = holdingDAO.getHoldings();
         Map<String, List<Holding>> holdingsMap = holdings.stream().collect(groupingBy(Holding::getSymbol));
