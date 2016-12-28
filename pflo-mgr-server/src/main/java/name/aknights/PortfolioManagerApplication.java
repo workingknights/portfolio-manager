@@ -8,8 +8,11 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import name.aknights.config.PortfolioManagerConfiguration;
 import name.aknights.db.MongoModule;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PortfolioManagerApplication extends Application<PortfolioManagerConfiguration> {
+    private static final Logger logger = LoggerFactory.getLogger(PortfolioManagerApplication.class);
 
     public static void main(final String[] args) throws Exception {
         new PortfolioManagerApplication().run(args);
@@ -34,10 +37,20 @@ public class PortfolioManagerApplication extends Application<PortfolioManagerCon
     @Override
     public void run(final PortfolioManagerConfiguration configuration,
                     final Environment environment) {
-        PortfolioManagerComponent component = name.aknights.DaggerPortfolioManagerComponent.builder()
-                .portfolioManagerModule(new PortfolioManagerModule(configuration))
-                .mongoModule(new MongoModule(configuration.getDbConfig(), environment))
-                .build();
+        PortfolioManagerComponent component;
+
+        if (configuration.getEnv() == null || configuration.getEnv().equalsIgnoreCase("prod")) {
+            component = DaggerPortfolioManagerComponent.builder()
+                    .yahooQuotesModule(new YahooQuotesModule(configuration.getYahooConfig()))
+                    .mongoModule(new MongoModule(configuration.getDbConfig(), environment))
+                    .build();
+        }
+        else {
+            logger.info("*** Building Test Instance of PortfolioManager ***");
+            component = DaggerTestPortfolioManagerComponent.builder()
+                    .mongoModule(new MongoModule(configuration.getDbConfig(), environment))
+                    .build();
+        }
 
         environment.jersey().setUrlPattern("/api/*");
 

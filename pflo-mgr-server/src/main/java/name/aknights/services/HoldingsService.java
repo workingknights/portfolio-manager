@@ -9,10 +9,7 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.math.MathContext;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.groupingBy;
@@ -36,10 +33,10 @@ public class HoldingsService {
         Collection<Holding> holdings = holdingDAO.getHoldings();
         Map<String, List<Holding>> holdingsMap = holdings.stream().collect(groupingBy(Holding::getSymbol));
 
-        Map<String, List<QuoteDetail>> tickerCurrencyMap = quotesService.getQuotes(holdingsMap.keySet()).stream().collect(groupingBy(QuoteDetail::getSymbol));
+        Map<String, List<QuoteDetail>> tickerCurrencyMap = quotesService.getQuotes(holdingsMap.keySet()).stream().collect(groupingBy(QuoteDetail::getTicker));
 
-        Map<String, Double> fxRatesMap = quotesService.getQuotes(Arrays.asList("GBP=X")).stream()
-                .collect(groupingBy(QuoteDetail::getCurrency, Collectors.summingDouble(QuoteDetail::getLastTradePrice)));
+        Map<String, Double> fxRatesMap = new HashMap<>();
+        fxRatesMap.put("GBP", quotesService.getQuote("GBP=X").get().getLastTradePrice());
         fxRatesMap.put("GBp", fxRatesMap.get("GBP") * 100); // add 'GBp' rate for pence rather than pounds
         fxRatesMap.put("USD", 1.0);
 

@@ -1,11 +1,25 @@
+server:
+  rootPath: '/api/'
+
+env: test
+
+dbConfig:
+  host: ds127968.mlab.com
+  port: 27968
+  dbName: heroku_n91f12d8
+  user: heroku_n91f12d8
+  password: ${MONGODB_PASS}
+
+server:
+  applicationConnectors:
+    - type: http
+      port: ${PORT:-5000}
+  adminConnectors:
+    - type: http
+      port: 8081
+
 logging:
   level: INFO
   loggers:
     name.aknights: DEBUG
 
-server:
-  rootPath: '/api/'
-
-
-mongoDbUri: 'mongodb://127.0.0.1:27017/portfolio'
-mongoDbName: 'portfolio'

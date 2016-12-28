@@ -33,7 +33,8 @@ import java.util.Optional;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class QuoteDetail {
-    private String symbol;
+    @JsonProperty("symbol")
+    private String ticker;
 
     @JsonProperty("PreviousClose")
     private Double previousClose;
@@ -77,22 +78,44 @@ public class QuoteDetail {
     public QuoteDetail() {
     }
 
+    public QuoteDetail(String ticker, Double previousClose, Double open, String currency, Double ask, Double lastTradePrice,
+                       Double ma50Day, Double ma200Day, String percentChange, String change, Double yearLow, Double yearHigh,
+                       String percentChangeFromYearLow, String percentChangeFromYearHigh) {
+        this.ticker = ticker;
+        this.previousClose = previousClose;
+        this.open = open;
+        this.currency = currency;
+        this.ask = ask;
+        this.lastTradePrice = lastTradePrice;
+        this.ma50Day = ma50Day;
+        this.ma200Day = ma200Day;
+        this.percentChange = percentChange;
+        this.change = change;
+        this.yearLow = yearLow;
+        this.yearHigh = yearHigh;
+        this.percentChangeFromYearLow = percentChangeFromYearLow;
+        this.percentChangeFromYearHigh = percentChangeFromYearHigh;
+    }
+
     /*
-     * Used in tests
-     */
-    public QuoteDetail(String symbol, Double lastTradePrice) {
-        this.symbol = symbol;
+         * Used in tests
+         */
+    QuoteDetail(String ticker, Double lastTradePrice) {
+        this.ticker = ticker;
         this.lastTradePrice = lastTradePrice;
     }
 
-    public QuoteDetail(String percentChange, String percentChangeFromYearLow, String percentChangeFromYearHigh) {
+    /*
+     * Used in tests
+     */
+    QuoteDetail(String percentChange, String percentChangeFromYearLow, String percentChangeFromYearHigh) {
         this.percentChange = percentChange;
         this.percentChangeFromYearLow = percentChangeFromYearLow;
         this.percentChangeFromYearHigh = percentChangeFromYearHigh;
     }
 
-    public String getSymbol() {
-        return symbol;
+    public String getTicker() {
+        return ticker;
     }
 
     public Optional<Double> getPreviousClose() {
@@ -121,9 +144,9 @@ public class QuoteDetail {
 
     public Double getPercentChange() {
         if (percentChange.startsWith("+"))
-            return Double.parseDouble(percentChange.substring(1, percentChange.length()-1))/100;
+            return Double.parseDouble(percentChange.substring(1, percentChange.length() - 1)) / 100;
         else
-            return Double.parseDouble(percentChange.substring(0, percentChange.length()-1))/100;
+            return Double.parseDouble(percentChange.substring(0, percentChange.length() - 1)) / 100;
     }
 
     public Double getChange() {
@@ -147,15 +170,15 @@ public class QuoteDetail {
 
     public Double getPercentChangeFromYearLow() {
         if (percentChangeFromYearLow.startsWith("+"))
-            return Double.parseDouble(percentChangeFromYearLow.substring(1, percentChangeFromYearLow.length()-1));
+            return Double.parseDouble(percentChangeFromYearLow.substring(1, percentChangeFromYearLow.length() - 1));
         else
-            return Double.parseDouble(percentChangeFromYearLow.substring(0, percentChangeFromYearLow.length()-1));
+            return Double.parseDouble(percentChangeFromYearLow.substring(0, percentChangeFromYearLow.length() - 1));
     }
 
     public Double getPercentChangeFromYearHigh() {
         if (percentChangeFromYearHigh.startsWith("+"))
-            return Double.parseDouble(percentChangeFromYearHigh.substring(1, percentChangeFromYearHigh.length()-1));
+            return Double.parseDouble(percentChangeFromYearHigh.substring(1, percentChangeFromYearHigh.length() - 1));
         else
-            return Double.parseDouble(percentChangeFromYearHigh.substring(0, percentChangeFromYearHigh.length()-1));
+            return Double.parseDouble(percentChangeFromYearHigh.substring(0, percentChangeFromYearHigh.length() - 1));
     }
 }

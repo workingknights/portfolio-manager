@@ -1,6 +1,8 @@
 server:
   rootPath: '/api/'
 
+env: prod
+
 dbConfig:
   host: ds127968.mlab.com
   port: 27968

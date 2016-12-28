@@ -11,8 +11,8 @@ import org.mongodb.morphia.Datastore;
 import javax.inject.Singleton;
 
 @Singleton
-@Component(modules = {PortfolioManagerModule.class, YahooQuotesModule.class, MongoModule.class})
-public interface PortfolioManagerComponent {
+@Component(modules = {PortfolioManagerModule.class, LocalQuotesModule.class, MongoModule.class})
+public interface TestPortfolioManagerComponent extends PortfolioManagerComponent {
     // Resources
     HoldingsResource getHoldingsResource();
     QuotesResource getQuotesResource();

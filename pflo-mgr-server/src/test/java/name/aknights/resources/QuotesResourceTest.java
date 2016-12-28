@@ -2,7 +2,7 @@ package name.aknights.resources;
 
 import name.aknights.api.Data;
 import name.aknights.config.YahooQuotesConfiguration;
-import name.aknights.services.QuotesService;
+import name.aknights.services.YahooQuotesService;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.junit.Test;
 
@@ -16,7 +16,7 @@ public class QuotesResourceTest {
     public void returnsValidResponseWhenGivenMultipleTickers() throws Exception {
         Client client = new JerseyClientBuilder().build();
         YahooQuotesConfiguration yahooQuotesConfig = new YahooQuotesConfiguration("http://query.yahooapis.com/v1/public/yql");
-        QuotesService quotesService = new QuotesService(client, yahooQuotesConfig);
+        YahooQuotesService quotesService = new YahooQuotesService(client, yahooQuotesConfig);
         QuotesResource resource = new QuotesResource(quotesService);
         Response response = resource.getQuotes("VUSA.L,VWO");
 

@@ -12,7 +12,7 @@ public class PortfolioServiceTest {
 
     @Before
     public void setUp() {
-        QuotesService quotesService = mock(QuotesService.class);
+        YahooQuotesService quotesService = mock(YahooQuotesService.class);
         HoldingsService holdingsService = mock(HoldingsService.class);
         service = new PortfolioService(quotesService, holdingsService);
     }
@@ -66,7 +66,7 @@ public class PortfolioServiceTest {
 //        PortfolioEntry entry = service.createEntry(holdingsMap, quoteDetail);
 //
 //        assertNotNull(entry);
-//        assertEquals(ticker, entry.getSymbol());
+//        assertEquals(ticker, entry.getTicker());
 //        assertEquals(5, entry.getTotalShares().longValue());
 //        assertEquals(0.1, entry.getTotalPercentGain().doubleValue(), 0.1);
 //    }
@@ -87,7 +87,7 @@ public class PortfolioServiceTest {
 //        PortfolioEntry entry = service.createEntry(holdingsMap, quoteDetail);
 //
 //        assertNotNull(entry);
-//        assertEquals(ticker, entry.getSymbol());
+//        assertEquals(ticker, entry.getTicker());
 //        assertEquals(15, entry.getTotalShares().longValue());
 //        assertEquals(0.147, entry.getTotalPercentGain().doubleValue(), 0.001);
 //
