@@ -10,7 +10,7 @@ import { Auth } from './auth.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  public title = 'Portfolio Viewer';
+  public title = 'Portfolio Manager';
 
 	constructor(private auth: Auth) {}
 }

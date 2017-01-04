@@ -31,7 +31,7 @@ export class Auth {
         }
 
         localStorage.setItem('profile', JSON.stringify(profile));
-        this.router.navigateByUrl('/portfolio');
+				this.router.navigateByUrl('/portfolio', { skipLocationChange: true });
         this.userProfile = profile;
       });
       this.lock.hide();
@@ -40,6 +40,7 @@ export class Auth {
 
   public login() {
     // Call the show method to display the widget.
+		console.log('Auth:login()');
     this.lock.show();
   }
 
@@ -56,6 +57,6 @@ export class Auth {
     this.userProfile = undefined;
 
     // Send the user back to the home page after logout
-    this.router.navigateByUrl('/');
+		this.router.navigateByUrl('/');
   }
 }

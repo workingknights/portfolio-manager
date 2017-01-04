@@ -22,6 +22,7 @@ import { HoldingFormComponent } from './holding-form/holding-form.component';
 import { PortfolioEntryDetailComponent } from './portfolio-entry-detail/portfolio-entry-detail.component';
 import { AuthGuard } from './auth.guard';
 import { Auth } from './auth.service';
+import { PortfolioComponent } from './portfolio/portfolio.component';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({
@@ -36,6 +37,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     HoldingsComponent,
     HoldingFormComponent,
     PortfolioEntryDetailComponent,
+    PortfolioComponent,
   ],
   imports: [
     BrowserModule,

@@ -9,7 +9,8 @@ export class AuthGuard implements CanActivate {
 
   canActivate() {
     if (!this.auth.authenticated()) {
-      this.router.navigate(['/']);
+			console.log('not authenticated so redirecting to root');
+      this.router.navigateByUrl('/');
       return false;
     }
     return true;
