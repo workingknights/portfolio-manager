@@ -2,6 +2,8 @@ package name.aknights;
 
 import dagger.Module;
 import dagger.Provides;
+import name.aknights.services.FxRatesService;
+import name.aknights.services.LocalFxRatesService;
 import name.aknights.services.LocalQuotesService;
 import name.aknights.services.QuotesService;
 
@@ -18,4 +20,9 @@ public class LocalQuotesModule {
         return new LocalQuotesService();
     }
 
+    @Singleton
+    @Provides
+    FxRatesService provideFxRatesService() {
+        return new LocalFxRatesService();
+    }
 }

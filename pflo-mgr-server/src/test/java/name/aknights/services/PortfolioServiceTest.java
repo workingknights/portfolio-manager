@@ -12,9 +12,10 @@ public class PortfolioServiceTest {
 
     @Before
     public void setUp() {
-        YahooQuotesService quotesService = mock(YahooQuotesService.class);
+        QuotesService quotesService = mock(QuotesService.class);
+        FxRatesService fxRatesService = mock(FxRatesService.class);
         HoldingsService holdingsService = mock(HoldingsService.class);
-        service = new PortfolioService(quotesService, holdingsService);
+        service = new PortfolioService(quotesService, fxRatesService, holdingsService);
     }
 
     @Test
@@ -52,45 +53,5 @@ public class PortfolioServiceTest {
         assertEquals("BUY", service.calcRecommendation(85.95, 88.36, -0.05,
                 1.47, -5.72));
     }
-
-//    @Test
-//    public void withOneHoldingPortfolioEntryIsCreatedCorrectly() throws Exception {
-//        String ticker = "TEST";
-//
-//        Map<String, List<Holding>> holdingsMap = new HashMap<>();
-//        Date tradeDate = Calendar.getInstance().getTime();
-//        holdingsMap.put(ticker, Arrays.asList(new Holding(ticker, 5, tradeDate, 10.0, 0.0)));
-//
-//        QuoteDetail quoteDetail = new QuoteDetail(ticker, 11.0);
-//
-//        PortfolioEntry entry = service.createEntry(holdingsMap, quoteDetail);
-//
-//        assertNotNull(entry);
-//        assertEquals(ticker, entry.getTicker());
-//        assertEquals(5, entry.getTotalShares().longValue());
-//        assertEquals(0.1, entry.getTotalPercentGain().doubleValue(), 0.1);
-//    }
-//
-//    @Test
-//    public void withMultipleHoldingsPortfolioEntryIsCreatedCorrectly() throws Exception {
-//        String ticker = "TEST";
-//
-//        Map<String, List<Holding>> holdingsMap = new HashMap<>();
-//        Date tradeDate = Calendar.getInstance().getTime();
-//        holdingsMap.put(ticker, Arrays.asList(
-//                new Holding(ticker, 5, tradeDate, 10.0, 0.0),
-//                new Holding(ticker, 10, tradeDate, 12.0, 0.0)
-//        ));
-//
-//        QuoteDetail quoteDetail = new QuoteDetail(ticker, 13.0);
-//
-//        PortfolioEntry entry = service.createEntry(holdingsMap, quoteDetail);
-//
-//        assertNotNull(entry);
-//        assertEquals(ticker, entry.getTicker());
-//        assertEquals(15, entry.getTotalShares().longValue());
-//        assertEquals(0.147, entry.getTotalPercentGain().doubleValue(), 0.001);
-//
-//    }
 
 }

@@ -33,8 +33,11 @@ import java.util.Optional;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class QuoteDetail {
-    @JsonProperty("symbol")
-    private String ticker;
+    @JsonProperty
+    private String symbol;
+
+    @JsonProperty("Name")
+    private String name;
 
     @JsonProperty("PreviousClose")
     private Double previousClose;
@@ -78,10 +81,11 @@ public class QuoteDetail {
     public QuoteDetail() {
     }
 
-    public QuoteDetail(String ticker, Double previousClose, Double open, String currency, Double ask, Double lastTradePrice,
+    public QuoteDetail(String symbol, String name, Double previousClose, Double open, String currency, Double ask, Double lastTradePrice,
                        Double ma50Day, Double ma200Day, String percentChange, String change, Double yearLow, Double yearHigh,
                        String percentChangeFromYearLow, String percentChangeFromYearHigh) {
-        this.ticker = ticker;
+        this.symbol = symbol;
+        this.name = name;
         this.previousClose = previousClose;
         this.open = open;
         this.currency = currency;
@@ -100,8 +104,8 @@ public class QuoteDetail {
     /*
          * Used in tests
          */
-    QuoteDetail(String ticker, Double lastTradePrice) {
-        this.ticker = ticker;
+    QuoteDetail(String symbol, Double lastTradePrice) {
+        this.symbol = symbol;
         this.lastTradePrice = lastTradePrice;
     }
 
@@ -114,8 +118,12 @@ public class QuoteDetail {
         this.percentChangeFromYearHigh = percentChangeFromYearHigh;
     }
 
-    public String getTicker() {
-        return ticker;
+    public String getSymbol() {
+        return symbol;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public Optional<Double> getPreviousClose() {

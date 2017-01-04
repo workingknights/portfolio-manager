@@ -1,9 +1,11 @@
 package name.aknights.resources;
 
 import com.codahale.metrics.annotation.Timed;
+import io.dropwizard.auth.Auth;
 import name.aknights.api.Data;
 import name.aknights.services.PortfolioService;
 
+import javax.annotation.security.PermitAll;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -11,6 +13,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.security.Principal;
 
 @Path("/portfolio")
 @Produces(MediaType.APPLICATION_JSON)
@@ -24,8 +27,9 @@ public class PortfolioResource {
     }
 
     @GET
+    @PermitAll
     @Timed
-    public Response getPortfolio() {
+    public Response getPortfolio(@Auth Principal principal) {
 //        Data data = new Data(portfolioService.getPortfolio());
         return Response.ok(portfolioService.getPortfolio()).build();
     }

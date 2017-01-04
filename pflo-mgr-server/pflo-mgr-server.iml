@@ -108,6 +108,9 @@
     <orderEntry type="library" name="Maven: com.google.dagger:dagger-compiler:2.8" level="project" />
     <orderEntry type="library" name="Maven: com.google.dagger:dagger-producers:2.8" level="project" />
     <orderEntry type="library" name="Maven: com.google.guava:guava:20.0" level="project" />
+    <orderEntry type="library" name="Maven: com.github.toastshaman:dropwizard-auth-jwt:1.0.2-0" level="project" />
+    <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-auth:1.0.5" level="project" />
+    <orderEntry type="library" name="Maven: org.bitbucket.b_c:jose4j:0.5.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.mockito:mockito-core:2.3.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: net.bytebuddy:byte-buddy:1.5.5" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: net.bytebuddy:byte-buddy-agent:1.5.5" level="project" />

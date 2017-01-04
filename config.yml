@@ -3,6 +3,9 @@ server:
 
 env: prod
 
+jwtTokenSecret: "cV2uHolULHblnTjc28BGbahb2UjwqN_iEu5yfgMo22KrOVr_9zeQ2i2zzN6ZwgXL"
+expectedAudience: "T2HQUxSUXXutd1rigWpUvdEONkd5s1gm"
+
 dbConfig:
   host: ds127968.mlab.com
   port: 27968

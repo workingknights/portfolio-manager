@@ -6,7 +6,9 @@ import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import dagger.Module;
 import dagger.Provides;
 import name.aknights.config.YahooQuotesConfiguration;
+import name.aknights.services.FxRatesService;
 import name.aknights.services.QuotesService;
+import name.aknights.services.YahooFxRatesService;
 import name.aknights.services.YahooQuotesService;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.JerseyClientBuilder;
@@ -36,6 +38,12 @@ public class YahooQuotesModule {
     @Provides
     QuotesService provideQuotesService() {
         return new YahooQuotesService(getClient(), config);
+    }
+
+    @Singleton
+    @Provides
+    FxRatesService provideFxRatesService() {
+        return new YahooFxRatesService(getClient(), config);
     }
 
 }

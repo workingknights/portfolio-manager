@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
 
+import { HoldingService } from './holding.service';
+import { PortfolioService } from './portfolio.service';
+import { Auth } from './auth.service';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -7,4 +11,6 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   public title = 'Portfolio Viewer';
+
+	constructor(private auth: Auth) {}
 }

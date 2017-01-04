@@ -6,21 +6,20 @@ import name.aknights.api.PortfolioEntry;
 import name.aknights.core.quotes.QuoteDetail;
 
 import javax.inject.Inject;
-import java.math.BigDecimal;
-import java.math.MathContext;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.groupingBy;
 
 public class PortfolioService {
 
     private final QuotesService quotesService;
+    private final FxRatesService fxRatesService;
     private final HoldingsService holdingsService;
 
     @Inject
-    public PortfolioService(QuotesService quotesService, HoldingsService holdingsService) {
+    public PortfolioService(QuotesService quotesService, FxRatesService fxRatesService, HoldingsService holdingsService) {
         this.quotesService = quotesService;
+        this.fxRatesService = fxRatesService;
         this.holdingsService = holdingsService;
     }
 
@@ -30,14 +29,14 @@ public class PortfolioService {
                 holdingsService.allHoldings().stream().collect(groupingBy(Holding::getSymbol));
 
         Collection<QuoteDetail> quotes = quotesService.getQuotes(holdings.keySet());
-        Map<String, Double> fxRatesMap = quotesService.getQuotes(Collections.singletonList("GBP=X")).stream()
-                .collect(groupingBy(QuoteDetail::getCurrency, Collectors.summingDouble(QuoteDetail::getLastTradePrice)));
-        fxRatesMap.put("GBp", fxRatesMap.get("GBP") * 100); // add 'GBp' rate for pence rather than pounds
-        fxRatesMap.put("USD", 1.0);
 
         LinkedList<PortfolioEntry> entries = new LinkedList<>();
 
-        quotes.forEach(q -> entries.add(createEntry(holdings.get(q.getTicker()), q, fxRatesMap)));
+        quotes.forEach(q -> {
+            Double fxRate = fxRatesService.getRate(q.getCurrency());
+            PortfolioEntry entry = createEntry(holdings.get(q.getSymbol()), q, fxRate);
+            entries.add(entry);
+        });
 
         PortfolioEntry summary = createSummaryRow(entries);
 
@@ -45,34 +44,33 @@ public class PortfolioService {
     }
 
     private PortfolioEntry createSummaryRow(Collection<PortfolioEntry> entries) {
-        BigDecimal totalMV = entries.stream().map(PortfolioEntry::getMarketValue).reduce(BigDecimal.ZERO, BigDecimal::add);
-        BigDecimal overallTotalGain = entries.stream().map(PortfolioEntry::getTotalGain).reduce(BigDecimal.ZERO, BigDecimal::add);
-        BigDecimal overallTotalPercentGain = overallTotalGain.divide(totalMV, MathContext.DECIMAL64);
+        Double totalMV = entries.stream().mapToDouble(PortfolioEntry::getMarketValue).sum();
+        Double overallTotalGain = entries.stream().mapToDouble(PortfolioEntry::getTotalGain).sum();
+        Double overallTotalPercentGain = overallTotalGain / totalMV;
         Double overallDailyGain = entries.stream().mapToDouble(PortfolioEntry::getDailyGain).sum();
 
-        return new PortfolioEntry(null, null, null, null, null,
+        return new PortfolioEntry(null,  null, null, null, null, null,
                 null, null, null,null, overallDailyGain, totalMV, overallTotalPercentGain,
                 overallTotalGain, null, null, null);
     }
 
-    PortfolioEntry createEntry(List<Holding> holdings, QuoteDetail q, Map<String, Double> fxRatesMap) {
-        BigDecimal currPrice = getCurrentPrice(q);
+    PortfolioEntry createEntry(List<Holding> holdings, QuoteDetail q, Double fxRate) {
+        Double currPrice = getCurrentPrice(q);
 
-        BigDecimal fxRate = new BigDecimal(fxRatesMap.get(q.getCurrency()));
         Integer totalNumShares = holdings.stream().mapToInt(Holding::getShares).sum();
-        BigDecimal currMarketValue = new BigDecimal(totalNumShares).multiply(currPrice).divide(fxRate, MathContext.DECIMAL64);
+        Double currMarketValue = totalNumShares * currPrice / fxRate;
 
-        BigDecimal weightedAvgInitialMarketValue = calcWeightedInitialMarketValue(holdings, fxRate);
+        Double weightedAvgInitialMarketValue = calcWeightedInitialMarketValue(holdings, fxRate);
 
         Double dailyGain  = q.getChange() * totalNumShares / fxRate.doubleValue();
 
-        BigDecimal totalGain = calculateTotalGain(currMarketValue, weightedAvgInitialMarketValue);
-        BigDecimal totalPercentGain = totalGain.divide(weightedAvgInitialMarketValue, MathContext.DECIMAL64);
+        Double totalGain = calculateTotalGain(currMarketValue, weightedAvgInitialMarketValue);
+        Double totalPercentGain = totalGain / weightedAvgInitialMarketValue;
 
         String recommendation = calcRecommendation(q.getMa50Day(), q.getMa200Day(), q.getPercentChange(),
                 q.getPercentChangeFromYearLow(), q.getPercentChangeFromYearHigh());
 
-        return new PortfolioEntry(q.getTicker(), totalNumShares, q.getPreviousClose().orElse(0.0), q.getOpen(),
+        return new PortfolioEntry(q.getSymbol(), q.getName(), totalNumShares, q.getPreviousClose().orElse(0.0), q.getOpen(),
                 q.getCurrency(), currPrice, q.getMa50Day(), q.getMa200Day(), q.getPercentChange(), dailyGain, currMarketValue,
                 totalPercentGain, totalGain, q.getYearLow(), q.getYearHigh(), recommendation);
     }
@@ -87,7 +85,7 @@ public class PortfolioService {
         else if(percentOver200DayMA >= 0.01 && percentOver200DayMA < 0.05) score += 3;
         else if(percentOver200DayMA >= 0.15) score -= 1;
 
-        if (percentChange >= 0.0 && percentChange < 0.004) score += 1;
+        if (percentChange >= 0.0 && percentChange < 0.01) score += 1;
         else if (percentChange >= 0.004) score -= 1;
 
         if (percentChangeFromYearLow >= 0 && percentChangeFromYearLow < 8.0) score += 3;
@@ -105,18 +103,15 @@ public class PortfolioService {
         return recommendation;
     }
 
-    private BigDecimal getCurrentPrice(QuoteDetail q) {
-        return new BigDecimal(Optional.of(q.getLastTradePrice()).orElse(q.getAsk().orElse(q.getPreviousClose().orElse(0.0))));
+    private Double getCurrentPrice(QuoteDetail q) {
+        return Optional.of(q.getLastTradePrice()).orElse(q.getAsk().orElse(q.getPreviousClose().orElse(0.0)));
     }
 
-    private BigDecimal calculateTotalGain(BigDecimal currMarketValue, BigDecimal weightedAvgInitialMarketValue) {
-        return (weightedAvgInitialMarketValue.compareTo(BigDecimal.ZERO) > 0)
-                    ? new BigDecimal(currMarketValue.toString()).subtract(weightedAvgInitialMarketValue)
-                    : BigDecimal.ZERO;
+    private Double calculateTotalGain(Double currMarketValue, Double weightedAvgInitialMarketValue) {
+        return (weightedAvgInitialMarketValue > 0) ? currMarketValue - weightedAvgInitialMarketValue : 0.0;
     }
 
-    private BigDecimal calcWeightedInitialMarketValue(List<Holding> holdings, BigDecimal fxRate) {
-        return new BigDecimal(holdings.stream().mapToDouble(Holding::getInitialMarketValue).sum())
-                .divide(fxRate, MathContext.DECIMAL64);
+    private Double calcWeightedInitialMarketValue(List<Holding> holdings, Double fxRate) {
+        return holdings.stream().mapToDouble(Holding::getInitialMarketValue).sum() / fxRate;
     }
 }

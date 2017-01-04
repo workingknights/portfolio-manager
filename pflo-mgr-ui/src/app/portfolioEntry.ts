@@ -1,6 +1,7 @@
 export class PortfolioEntry {
     constructor(
-        public symbol: string,
+        public ticker: string,
+        public name: string,
 				public totalShares: number,
         public previousClose: number,
         public marketValue: number,

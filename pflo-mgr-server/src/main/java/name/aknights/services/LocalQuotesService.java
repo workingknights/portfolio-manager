@@ -34,9 +34,9 @@ public class LocalQuotesService implements QuotesService {
     }
 
     private QuoteDetail generateQuote(String ticker, String currency) {
-        return new QuoteDetail(ticker, rand(100.0), rand(100.0), currency, rand(100.0), rand(100.0),
-                        rand(100.0), rand(100.0), String.format("+%s",rand(1.0))+"%",String.format("+%s",rand(10.0)),
-                        rand(100.0), rand(100.0), "+1.2%",  "-2.3%");
+        return new QuoteDetail(ticker, ticker+" Name", rand(100.0), rand(100.0), currency, rand(100.0),
+                rand(100.0), rand(100.0), rand(100.0), String.format("+%s",rand(1.0))+"%",
+                String.format("+%s",rand(1.0)), rand(100.0), rand(100.0), "+1.2%", "-2.3%");
     }
 
     private String ccy() {

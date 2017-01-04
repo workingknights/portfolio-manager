@@ -41,7 +41,7 @@ public class YahooQuotesService implements QuotesService {
 
     @Override
     public Optional<QuoteDetail> getQuote(String ticker) {
-        String origSymbolQueryParam = String.format("select * from yahoo.finance.quotes where symbol = %s", ticker);
+        String origSymbolQueryParam = String.format("select * from yahoo.finance.quotes where symbol = \"%s\"", ticker);
         String symbolQueryParam = origSymbolQueryParam.replace(" ", "%20");
 
         if (logger.isDebugEnabled()) logger.debug("origSymbolQueryParam = {}, symbolQueryParam = {}", origSymbolQueryParam, symbolQueryParam);

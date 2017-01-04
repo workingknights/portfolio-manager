@@ -1,0 +1,66 @@
+<div *ngIf="portfolioEntry">
+	<div class="row">
+		<div class="col-sm-4 pflo-detail-header">
+			<label>{{portfolioEntry.ticker}}</label>
+		</div>
+		<div class="col-sm-8 pflo-detail-header">
+			<label>{{portfolioEntry.name}}</label>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-4 pflo-detail">
+			<span>Total Shares: </span><label>{{portfolioEntry.totalShares}}</label>
+		</div>
+		<div class="col-sm-4 pflo-detail">
+			<span>Currency: </span><label>{{portfolioEntry.currency}}</label>
+		</div>
+		<div class="col-sm-4 pflo-detail">
+			<span>Market Value: </span><label>{{portfolioEntry.marketValue.toFixed(2) | currency:'USD':true}}</label>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-4 pflo-detail">
+			<span>Previous Close: </span><label>{{portfolioEntry.previousClose | number:'1.2-2'}}</label>
+		</div>
+		<div class="col-sm-4 pflo-detail">
+			<span>Percent Change: </span><label>{{portfolioEntry.percentChange | percent:'1.2-2'}}</label>
+		</div>
+		<div class="col-sm-4 pflo-detail">
+			<span>Daily Gain: </span><label>{{portfolioEntry.dailyGain.toFixed(2) | currency:'USD':true}}</label>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-4 pflo-detail">
+			<span>Total Gain: </span><label>{{portfolioEntry.totalGain.toFixed(2) | currency:'USD':true}}</label>
+		</div>
+		<div class="col-sm-4 pflo-detail">
+			<span>Total % Gain: </span><label>{{portfolioEntry.totalPercentGain | percent:'1.2-2'}}</label>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-4 pflo-detail">
+			<span>50 Day MA: </span><label>{{portfolioEntry.ma50Day | number:'1.2-2'}}</label>
+		</div>
+		<div class="col-sm-4 pflo-detail">
+			<span>200 Day MA: </span><label>{{portfolioEntry.ma200Day | number:'1.2-2'}}</label>
+		</div>
+		<div class="col-sm-4 pflo-detail">
+			<span>Year Low: </span><label>{{portfolioEntry.yearLow | number:'1.2-2'}}</label>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-4 pflo-detail">
+			<span>Year High: </span><label>{{portfolioEntry.yearHigh |  number:'1.2-2'}}</label>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-4 pflo-detail">
+			<span>Recommendation: </span><label>{{portfolioEntry.recommendation}}</label>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-sm-2">
+		<button (click)="goBack()">Back</button>
+	</div>
+</div>

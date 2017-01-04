@@ -50,13 +50,7 @@ export class HoldingFormComponent implements OnInit {
 	        return null;
 	    }
 	}
-
-  // set tradeDate(e) {
-  //   e = e.split('-');
-  //   let d = new Date(Date.UTC(e[0], e[1] - 1, e[2]));
-  //   this.tradeDate.setFullYear(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate() + 1);
-  // }
-
+	
   get tradeDate() {
     return this.tradeDate.toISOString().substring(0, 10);
   }

@@ -1,17 +1,19 @@
-<div class="container">
-  <div class="row">
-		<div class="col-sm-12">
-			<h1>{{title}}</h1>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-sm-12">
-			<nav>
-			  <a routerLink="/" routerLinkActive="active">Portfolio</a>
-			  <!-- <a routerLink="/newHolding" routerLinkActive="active">Add Holding</a> -->
-			  <a routerLink="/holdings" routerLinkActive="active">Holdings</a>
-			</nav>
-		</div>
-	</div>
+<div class="container-fluid">
+	<nav class="navbar navbar-light">
+		<a class="navbar-brand" href="#">Portfolio Manager</a>
+		<ul class="nav navbar-nav" *ngIf="auth.authenticated()">
+			<li class="nav-item active">
+				<a class="nav-link" routerLink="/portfolio" routerLinkActive="active">Portfolio</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" routerLink="/holdings" routerLinkActive="active">Holdings</a>
+			</li>
+		</ul>
+		<form class="form-inline float-sm-right">
+			<span *ngIf="auth.authenticated() && auth.userProfile" class="align-middle" style="margin-right: 15px"><strong>Welcome: </strong> {{auth.userProfile.name}}</span>
+			<button class="btn btn-outline-primary" (click)="auth.login()" *ngIf="!auth.authenticated()">Log In</button>
+			<button class="btn btn-outline-primary" (click)="auth.logout()" *ngIf="auth.authenticated()">Log Out</button>
+		</form>
+	</nav>
 	<router-outlet></router-outlet>
 </div>

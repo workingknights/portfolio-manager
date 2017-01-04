@@ -1,32 +1,32 @@
 package name.aknights.api;
 
-import java.math.BigDecimal;
-
 public class PortfolioEntry {
-    private String symbol;
+    private String ticker;
+    private String name;
     private Integer totalShares;
     private Double previousClose;
     private Double open;
     private Double percentChange;
     private Double dailyGain;
-    private BigDecimal marketValue;
-    private BigDecimal totalPercentGain;
-    private BigDecimal totalGain;
+    private Double marketValue;
+    private Double totalPercentGain;
+    private Double totalGain;
     private String currency;
     private Double yearLow;
     private Double yearHigh;
     private String recommendation;
-    private BigDecimal currPrice;
+    private Double currPrice;
     private Double ma50Day;
     private Double ma200Day;
 
     public PortfolioEntry() {
     }
 
-    public PortfolioEntry(String symbol, Integer totalShares, Double previousClose, Double open, String currency, BigDecimal currPrice,
-                          Double ma50Day, Double ma200Day, Double percentChange, Double dailyGain, BigDecimal marketValue, BigDecimal totalPercentGain,
-                          BigDecimal totalGain, Double yearLow, Double yearHigh, String recommendation) {
-        this.symbol = symbol;
+    public PortfolioEntry(String ticker, String name, Integer totalShares, Double previousClose, Double open, String currency, Double currPrice,
+                          Double ma50Day, Double ma200Day, Double percentChange, Double dailyGain, Double marketValue, Double totalPercentGain,
+                          Double totalGain, Double yearLow, Double yearHigh, String recommendation) {
+        this.ticker = ticker;
+        this.name = name;
         this.totalShares = totalShares;
         this.previousClose = previousClose;
         this.open = open;
@@ -44,8 +44,12 @@ public class PortfolioEntry {
         this.recommendation = recommendation;
     }
 
-    public String getSymbol() {
-        return symbol;
+    public String getTicker() {
+        return ticker;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public Integer getTotalShares() {
@@ -68,15 +72,15 @@ public class PortfolioEntry {
         return dailyGain;
     }
 
-    public BigDecimal getMarketValue() {
+    public Double getMarketValue() {
         return marketValue;
     }
 
-    public BigDecimal getTotalPercentGain() {
+    public Double getTotalPercentGain() {
         return totalPercentGain;
     }
 
-    public BigDecimal getTotalGain() {
+    public Double getTotalGain() {
         return totalGain;
     }
 
@@ -96,7 +100,7 @@ public class PortfolioEntry {
         return recommendation;
     }
 
-    public BigDecimal getCurrPrice() {
+    public Double getCurrPrice() {
         return currPrice;
     }
 
