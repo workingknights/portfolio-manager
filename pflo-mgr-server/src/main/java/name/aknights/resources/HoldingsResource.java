@@ -42,7 +42,7 @@ public class HoldingsResource {
     @PermitAll
     @Timed
     public Response listAll(@Auth Principal principal) {
-        return Response.ok(new Data(holdingsService.allHoldings())).build();
+        return Response.ok(new Data<>(holdingsService.allHoldings())).build();
     }
 
     @GET
@@ -54,17 +54,19 @@ public class HoldingsResource {
     }
 
     @POST
+    @PermitAll
     @Timed
-    public Response add(@NotNull @Valid Holding newHolding) {
+    public Response add(@NotNull @Valid Holding newHolding, @Auth Principal principal) {
         Object id = holdingsService.addNewHolding(newHolding);
         logger.debug("add() - newHolding = {}, id = {}", newHolding, id);
         return Response.created(UriBuilder.fromResource(HoldingsResource.class).build(id)).build();
     }
 
     @DELETE
+    @PermitAll
     @Timed
     @Path("/{id}")
-    public Response delete(@PathParam("id") String id) {
+    public Response delete(@PathParam("id") String id, @Auth Principal principal) {
         if (!holdingsService.deleteHolding(id)) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }

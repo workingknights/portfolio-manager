@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-
-import { Holding }        from '.././holding';
-import { HoldingService } from '.././holding.service';
-
 import { RouterModule, Routes } from '@angular/router';
+
+import { Holding } from '.././holding';
+import { HoldingService } from '.././holding.service';
+import { Auth } from '../auth.service';
 
 @Component({
   selector: 'app-holdings',
@@ -13,23 +13,34 @@ import { RouterModule, Routes } from '@angular/router';
 export class HoldingsComponent implements OnInit {
 
   public holdings: Holding[] = [];
+	private errorMessage: string;
 
-  constructor(private holdingService: HoldingService) { }
+  constructor(
+    private holdingService: HoldingService,
+    private auth: Auth) { }
 
   public ngOnInit() {
-    this.refreshHoldingsList();
+    if (this.auth.authenticated()) {
+      this.refreshHoldingsList();
+    }
   }
 
   refreshHoldingsList() {
     this.holdingService.getHoldings()
-      .then(holdings => this.holdings = holdings);
+      // .then(holdings => this.holdings = holdings);
+      .subscribe(holdings => this.holdings = holdings,
+			error => this.errorMessage = <any>error);
   }
 
   delete(holding: Holding): void {
     this.holdingService
-    .delete(holding.id)
-    .then(() => {
-      this.holdings = this.holdings.filter(h => h != holding);
-    });
+      .delete(holding.id)
+      // .then(() => {
+      //   this.holdings = this.holdings.filter(h => h != holding);
+      // });
+      .subscribe(() => {
+        this.holdings = this.holdings.filter(h => h != holding);
+      },
+			error => this.errorMessage = <any>error);
   }
 }

@@ -1,52 +1,62 @@
 import { Injectable } from '@angular/core';
-import { Headers, Http } from '@angular/http';
+import { Headers, Response } from '@angular/http';
 
-import 'rxjs/add/operator/toPromise';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/map';
 
+import { AuthHttp } from 'angular2-jwt';
+
+import { Auth } from './auth.service';
 import { Holding } from './holding';
 
 @Injectable()
 export class HoldingService {
 
-  constructor(private http: Http) { }
+  constructor(private auth: Auth, private authHttp: AuthHttp) { }
 
-  private headers = new Headers({ 'Content-Type': 'application/json' });
   private holdingsUrl = 'api/holding';
 
-  public getHoldings(): Promise<Holding[]> {
-    return this.http.get(this.holdingsUrl)
-      .toPromise()
-      .then(response => response.json().data as Holding[])
+  public getHoldings(): Observable<Holding[]> {
+    return this.authHttp.get(this.holdingsUrl)
+      .map(response => response.json().data as Holding[])
       .catch(this.handleError);
   }
 
-  public getHolding(id: string): Promise<Holding> {
+  public getHolding(id: string): Observable<Holding> {
     return this.getHoldings()
-      .then(holdings => holdings.find(holding => holding.id === id));
+      .map(holdings => holdings.find(holding => holding.id === id));
   }
 
-  public create(holding: Holding): Promise<void> {
+  public create(holding: Holding): Observable<void> {
     holding.id = "";
     console.log('create() json=' + JSON.stringify(holding));
-    return this.http
-      .post(this.holdingsUrl, JSON.stringify(holding), { headers: this.headers })
-      .toPromise()
-      .then(() => null)
+    return this.authHttp
+      .post(this.holdingsUrl, JSON.stringify(holding))
+      .map(() => null)
       .catch(this.handleError);
   }
 
-  public delete(id: String): Promise<void> {
+  public delete(id: String): Observable<void> {
     const url = `${this.holdingsUrl}/${id}`;
-    return this.http
-      .delete(url, { headers: this.headers })
-      .toPromise()
-      .then(() => null)
+    return this.authHttp
+      .delete(url)
+      .map(() => null)
       .catch(this.handleError);
   }
 
-  private handleError(error: any): Promise<any> {
-    console.error('An error occurred', error); // for demo purposes only
-    return Promise.reject(error.message || error);
+	private handleError(error: Response | any) {
+    // In a real world app, we might use a remote logging infrastructure
+    let errMsg: string;
+    if (error instanceof Response) {
+      const body = error.json() || '';
+      const err = body.error || JSON.stringify(body);
+      errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
+    } else {
+      errMsg = error.message ? error.message : error.toString();
+    }
+    console.error(errMsg);
+    return Observable.throw(errMsg);
   }
 
 }

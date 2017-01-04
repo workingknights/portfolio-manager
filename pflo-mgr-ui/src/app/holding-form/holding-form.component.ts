@@ -50,7 +50,7 @@ export class HoldingFormComponent implements OnInit {
 	        return null;
 	    }
 	}
-	
+
   get tradeDate() {
     return this.tradeDate.toISOString().substring(0, 10);
   }

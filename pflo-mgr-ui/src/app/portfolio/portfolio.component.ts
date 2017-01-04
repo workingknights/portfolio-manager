@@ -28,9 +28,6 @@ export class PortfolioComponent implements OnInit {
     if (this.auth.authenticated()) {
       this.refreshPortfolio();
     }
-		// else {
-		// 	this.auth.login();
-		// }
   }
 
   refresh(event) {

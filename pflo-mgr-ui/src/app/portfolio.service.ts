@@ -16,7 +16,6 @@ export class PortfolioService {
 
   constructor(private auth: Auth, private authHttp: AuthHttp) { }
 
-  private headers = new Headers({ 'Content-Type': 'application/json' });
   private portfolioUrl = 'api/portfolio';
 
   public getPortfolio(): Observable<Portfolio> {
