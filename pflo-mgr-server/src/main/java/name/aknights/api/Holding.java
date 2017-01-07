@@ -96,7 +96,7 @@ public class Holding {
 
     @JsonProperty
     public Double getCost() {
-        return getInitialMarketValue() - ((commission != null) ? commission : 0.0);
+        return getInitialMarketValue() + ((commission != null) ? commission : 0.0);
     }
 
     @JsonProperty

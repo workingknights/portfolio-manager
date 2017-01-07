@@ -1,4 +1,4 @@
-package name.aknights.services;
+package name.aknights.core.exceptions;
 
 public class QuoteNotFoundException extends Throwable {
     public QuoteNotFoundException(String ticker) {

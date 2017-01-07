@@ -6,17 +6,17 @@
 			[rows]="holdings"
 			[columnMode]="'flex'"
 			[rowHeight]="'auto'">
-			<swui-datatable-column prop="symbol" [flexGrow]="1"></swui-datatable-column>
-			<swui-datatable-column prop="currency" [flexGrow]="1"></swui-datatable-column>
+			<swui-datatable-column prop="symbol" [flexGrow]="0.9"></swui-datatable-column>
+			<swui-datatable-column prop="currency" [flexGrow]="0.8"></swui-datatable-column>
 			<swui-datatable-column prop="tradeDate" [flexGrow]="1">
 				<template let-value="value" swui-datatable-cell-template>
 					{{value | date:'d/MM/y'}}
 				</template>
 			</swui-datatable-column>
-			<swui-datatable-column prop="shares" [flexGrow]="1"></swui-datatable-column>
+			<swui-datatable-column prop="shares" [flexGrow]="0.8"></swui-datatable-column>
 			<swui-datatable-column prop="tradePrice" [flexGrow]="1"></swui-datatable-column>
-			<swui-datatable-column prop="commission" [flexGrow]="1"></swui-datatable-column>
-			<swui-datatable-column prop="initialMarketValue" [flexGrow]="1.5">
+			<swui-datatable-column prop="commission" [flexGrow]="0.9"></swui-datatable-column>
+			<swui-datatable-column prop="initialMarketValue" [flexGrow]="1.4">
 				<template let-value="value" swui-datatable-cell-template>
 					{{value.toFixed(2)}}
 				</template>

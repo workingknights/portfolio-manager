@@ -32,8 +32,6 @@ public class YahooQuotesService implements QuotesService {
         symbolQueryParam = symbolQueryParam.replace("(", "%28%22");
         symbolQueryParam = symbolQueryParam.replace(")", "%22%29");
 
-        if (logger.isDebugEnabled()) logger.debug("origSymbolQueryParam = {}, symbolQueryParam = {}", origSymbolQueryParam, symbolQueryParam);
-
         QuotesResponse quotesData = getQuotesResponse(symbolQueryParam);
 
         return quotesData.getQuery().getResults().getQuote();
@@ -44,19 +42,20 @@ public class YahooQuotesService implements QuotesService {
         String origSymbolQueryParam = String.format("select * from yahoo.finance.quotes where symbol = \"%s\"", ticker);
         String symbolQueryParam = origSymbolQueryParam.replace(" ", "%20");
 
-        if (logger.isDebugEnabled()) logger.debug("origSymbolQueryParam = {}, symbolQueryParam = {}", origSymbolQueryParam, symbolQueryParam);
-
         QuotesResponse quotesData = getQuotesResponse(symbolQueryParam);
 
         return quotesData.getQuery().getResults().getQuote().stream().findFirst();
     }
 
     private QuotesResponse getQuotesResponse(String symbolQueryParam) {
+        if (logger.isDebugEnabled()) {
+            logger.debug("full query = {}{}{}{}{}", apiUrl, "?q=", symbolQueryParam, "format=json", "env=store://datatables.org/alltableswithkeys");
+        }
         return client.target(apiUrl)
-                .queryParam("q", symbolQueryParam)
-                .queryParam("format", "json")
-                .queryParam("env", "store://datatables.org/alltableswithkeys")
-                .request(MediaType.APPLICATION_JSON)
-                .get(QuotesResponse.class);
+            .queryParam("q", symbolQueryParam)
+            .queryParam("format", "json")
+            .queryParam("env", "store://datatables.org/alltableswithkeys")
+            .request(MediaType.APPLICATION_JSON)
+            .get(QuotesResponse.class);
     }
 }

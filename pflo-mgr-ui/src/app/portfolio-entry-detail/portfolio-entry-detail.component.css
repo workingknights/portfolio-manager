@@ -5,7 +5,7 @@ div.pflo-detail, div.pflo-detail-header {
 	margin-bottom: 10px;
 }
 
-div.pflo-detail-header {
+div.pflo-detail-header a, div.pflo-detail-header label {
 	font-size: 1.4em;
 	margin-bottom: 20px;
 }

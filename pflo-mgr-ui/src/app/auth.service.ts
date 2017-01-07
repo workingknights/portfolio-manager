@@ -22,7 +22,7 @@ export class Auth {
     // Add callback for lock `authenticated` event
     this.lock.on('authenticated', (authResult) => {
       localStorage.setItem('id_token', authResult.idToken);
-      console.log('Auth:() - set token in local storage');
+      // console.log('Auth:() - set token in local storage');
 
       // Fetch profile information
       this.lock.getProfile(authResult.idToken, (error, profile) => {
@@ -40,7 +40,6 @@ export class Auth {
 
   public login() {
     // Call the show method to display the widget.
-		console.log('Auth:login()');
     this.lock.show();
   }
 

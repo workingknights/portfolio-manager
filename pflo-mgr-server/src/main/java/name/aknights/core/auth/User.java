@@ -4,14 +4,14 @@ import java.security.Principal;
 
 public class User implements Principal {
 
-    private final String username;
+    private final String userId;
 
-    public User(String username) {
-        this.username = username;
+    public User(String userId) {
+        this.userId = userId;
     }
 
     @Override
     public String getName() {
-        return username;
+        return userId;
     }
 }

@@ -3,12 +3,20 @@ package name.aknights.services;
 import name.aknights.api.Holding;
 import name.aknights.api.Portfolio;
 import name.aknights.api.PortfolioEntry;
+import name.aknights.core.Recommendation;
 import name.aknights.core.quotes.QuoteDetail;
 
 import javax.inject.Inject;
-import java.util.*;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import static java.util.stream.Collectors.groupingBy;
+import static name.aknights.core.Recommendation.Direction.BUY;
+import static name.aknights.core.Recommendation.Direction.HOLD;
+import static name.aknights.core.Recommendation.Direction.SELL;
 
 public class PortfolioService {
 
@@ -44,74 +52,133 @@ public class PortfolioService {
     }
 
     private PortfolioEntry createSummaryRow(Collection<PortfolioEntry> entries) {
-        Double totalMV = entries.stream().mapToDouble(PortfolioEntry::getMarketValue).sum();
+        Double totalMVBase = entries.stream().mapToDouble(PortfolioEntry::getMarketValueBase).sum();
+        Double totalCost = entries.stream().mapToDouble(PortfolioEntry::getTotalCost).sum();
         Double overallTotalGain = entries.stream().mapToDouble(PortfolioEntry::getTotalGain).sum();
-        Double overallTotalPercentGain = overallTotalGain / totalMV;
-        Double overallDailyGain = entries.stream().mapToDouble(PortfolioEntry::getDailyGain).sum();
+        Double overallTotalGainBase = entries.stream().mapToDouble(PortfolioEntry::getTotalGainBase).sum();
+        Double overallTotalPercentGain = overallTotalGain / totalCost;
+        Double overallDailyGain = entries.stream().mapToDouble(PortfolioEntry::getDailyGainBase).sum();
 
-        return new PortfolioEntry(null,  null, null, null, null, null,
-                null, null, null,null, overallDailyGain, totalMV, overallTotalPercentGain,
-                overallTotalGain, null, null, null);
+        return new PortfolioEntry(null,  null, null, null,
+                null, null, null,null, overallDailyGain, totalCost, null,
+                totalMVBase, overallTotalPercentGain,null, overallTotalGainBase, null, null, null, null);
     }
 
-    PortfolioEntry createEntry(List<Holding> holdings, QuoteDetail q, Double fxRate) {
-        Double currPrice = getCurrentPrice(q);
+    PortfolioEntry createEntry(List<Holding> holdings, QuoteDetail q, Double fxRateToBase) {
+        double currPrice = getCurrentPrice(q);
 
-        Integer totalNumShares = holdings.stream().mapToInt(Holding::getShares).sum();
-        Double currMarketValue = totalNumShares * currPrice / fxRate;
+        int totalNumShares = holdings.stream().mapToInt(Holding::getShares).sum();
+        double currMarketValue = totalNumShares * currPrice;
+        double currMarketValueBase = currMarketValue / fxRateToBase;
 
-        Double weightedAvgInitialMarketValue = calcWeightedInitialMarketValue(holdings, fxRate);
+        double totalCost = getTotalCost(holdings, q);
 
-        Double dailyGain  = q.getChange() * totalNumShares / fxRate.doubleValue();
+        double avgUnitCost = totalCost / totalNumShares;
 
-        Double totalGain = calculateTotalGain(currMarketValue, weightedAvgInitialMarketValue);
-        Double totalPercentGain = totalGain / weightedAvgInitialMarketValue;
+        double dailyGainBase  = q.getChange() * totalNumShares / fxRateToBase;
 
-        String recommendation = calcRecommendation(q.getMa50Day(), q.getMa200Day(), q.getPercentChange(),
+        double totalGain = currMarketValue - totalCost;
+        double totalGainBase = totalGain / fxRateToBase;
+        double totalPercentGain = totalGain / totalCost;
+
+        Recommendation recommendation = calcRecommendation(q.getMa50Day(), q.getMa200Day(), q.getPercentChange(),
                 q.getPercentChangeFromYearLow(), q.getPercentChangeFromYearHigh());
 
-        return new PortfolioEntry(q.getSymbol(), q.getName(), totalNumShares, q.getPreviousClose().orElse(0.0), q.getOpen(),
-                q.getCurrency(), currPrice, q.getMa50Day(), q.getMa200Day(), q.getPercentChange(), dailyGain, currMarketValue,
-                totalPercentGain, totalGain, q.getYearLow(), q.getYearHigh(), recommendation);
+        return new PortfolioEntry(q.getSymbol(), q.getName(), totalNumShares,
+                q.getCurrency(), currPrice, q.getMa50Day(), q.getMa200Day(), q.getPercentChange(), dailyGainBase, totalCost, currMarketValue,
+                currMarketValueBase, totalPercentGain, totalGain, totalGainBase, q.getYearLow(), q.getYearHigh(), avgUnitCost, recommendation);
     }
 
-    String calcRecommendation(Double ma50Day, Double ma200Day, Double percentChange, Double percentChangeFromYearLow, Double percentChangeFromYearHigh) {
+    Recommendation calcRecommendation(Double ma50Day, Double ma200Day, Double percentChange, Double percentChangeFromYearLow, Double percentChangeFromYearHigh) {
+
+        Recommendation recommendation = new Recommendation();
+
         int score = 5;
 
-        double percentOver200DayMA = (ma50Day - ma200Day) / ma200Day;
+        score += checkGoldenCross(ma50Day, ma200Day, recommendation);
 
-        if(percentOver200DayMA < -0.06) score -= 2;
-        else if(percentOver200DayMA <= -0.03) score -= 1;
-        else if(percentOver200DayMA >= 0.01 && percentOver200DayMA < 0.05) score += 3;
-        else if(percentOver200DayMA >= 0.15) score -= 1;
+        score += checkDailyChange(percentChange, recommendation);
 
-        if (percentChange >= 0.0 && percentChange < 0.01) score += 1;
-        else if (percentChange >= 0.004) score -= 1;
+        score += checkMoveFromYearLowHigh(percentChangeFromYearLow, percentChangeFromYearHigh, recommendation);
 
-        if (percentChangeFromYearLow >= 0 && percentChangeFromYearLow < 8.0) score += 3;
-        else if (percentChangeFromYearLow >= 8.0 && percentChangeFromYearLow < 12.0) score += 2;
-        else if (percentChangeFromYearLow >= 12.0 && percentChangeFromYearLow < 25.0) score += 1;
-
-        if (percentChangeFromYearHigh <= 0 && percentChangeFromYearHigh > -3.0) score -= 2;
-        else if (percentChangeFromYearHigh <= -3.0 && percentChangeFromYearHigh > -6.0) score -= 1;
-//        else if (percentChangeFromYearHigh <= -6.0 && percentChangeFromYearHigh > -12.0) score -= 1;
-
-        String recommendation = "HOLD";
-        if (score > 6) recommendation = "BUY";
-        else if (score < 3) recommendation = "SELL";
+        if (score > 6) recommendation.setDirection(BUY);
+        else if (score < 3) recommendation.setDirection(SELL);
 
         return recommendation;
     }
 
+    int checkGoldenCross(Double ma50Day, Double ma200Day, Recommendation recommendation) {
+        int adjust = 0;
+
+        double percentOver200DayMA = (ma50Day - ma200Day) / ma200Day * 100;
+
+        if(percentOver200DayMA < -10) {
+            recommendation.addContributor("50 Day MA significantly below 200 Day MA");
+            adjust = -2;
+        }
+        else if(percentOver200DayMA <= -6 && percentOver200DayMA >= -10) {
+            recommendation.addContributor("50 Day MA below 200 Day MA");
+            adjust = -1;
+        }
+        else if(percentOver200DayMA >= 5 && percentOver200DayMA < 15) {
+            recommendation.addContributor("In a Golden Cross");
+            adjust = 2;
+        }
+        else if(percentOver200DayMA >= 25) {
+            adjust = -1;
+        }
+
+        return adjust;
+    }
+
+    int checkMoveFromYearLowHigh(Double percentChangeFromYearLow, Double percentChangeFromYearHigh, Recommendation recommendation) {
+        int adjust = 0;
+
+        if (percentChangeFromYearLow >= 0 && percentChangeFromYearLow < 8.0) {
+            recommendation.addContributor("Very close to Year Low");
+            adjust += 3;
+        }
+        else if (percentChangeFromYearLow >= 8.0 && percentChangeFromYearLow < 12.0) {
+            recommendation.addContributor("Close to Year Low");
+            adjust += 2;
+        }
+        else if (percentChangeFromYearLow >= 12.0 && percentChangeFromYearLow < 25.0) adjust += 1;
+
+        if (percentChangeFromYearHigh <= 0 && percentChangeFromYearHigh > -3.0) {
+            recommendation.addContributor("Very close to Year High");
+            adjust -=2;
+        }
+        else if (percentChangeFromYearHigh <= -3.0 && percentChangeFromYearHigh > -6.0) adjust -=1;
+//        else if (percentChangeFromYearHigh <= -6.0 && percentChangeFromYearHigh > -12.0) adjust = -1;
+
+        return adjust;
+    }
+
+    int checkDailyChange(Double percentChange, Recommendation recommendation) {
+        int adjust = 0;
+
+        if (percentChange >= 0.0 && percentChange < 0.01) {
+            recommendation.addContributor("Small positive change in price");
+            adjust = 1;
+        }
+        else if (percentChange >= 0.008) {
+            recommendation.addContributor("Too large a positive change in price");
+            adjust = -1;
+        }
+        return adjust;
+    }
+
     private Double getCurrentPrice(QuoteDetail q) {
-        return Optional.of(q.getLastTradePrice()).orElse(q.getAsk().orElse(q.getPreviousClose().orElse(0.0)));
+        return Optional.ofNullable(q.getLastTradePrice()).orElse(
+//                q.getAsk().orElse(
+                        q.getPreviousClose().orElse(
+                                0.0));
     }
 
-    private Double calculateTotalGain(Double currMarketValue, Double weightedAvgInitialMarketValue) {
-        return (weightedAvgInitialMarketValue > 0) ? currMarketValue - weightedAvgInitialMarketValue : 0.0;
+    private double getTotalCost(List<Holding> holdings, QuoteDetail q) {
+        double totalCost = holdings.stream().mapToDouble(Holding::getCost).sum();
+//        totalCost /= Currency.valueOf(q.getCurrency()).getFactor();
+        return totalCost;
     }
 
-    private Double calcWeightedInitialMarketValue(List<Holding> holdings, Double fxRate) {
-        return holdings.stream().mapToDouble(Holding::getInitialMarketValue).sum() / fxRate;
-    }
 }

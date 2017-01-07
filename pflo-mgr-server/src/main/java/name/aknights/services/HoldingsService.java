@@ -22,11 +22,13 @@ public class HoldingsService {
 
     private HoldingDAO holdingDAO;
     private QuotesService quotesService;
+    private FxRatesService fxRatesService;
 
     @Inject
-    public HoldingsService(HoldingDAO holdingDAO, QuotesService quotesService) {
+    public HoldingsService(HoldingDAO holdingDAO, QuotesService quotesService, FxRatesService fxRatesService) {
         this.holdingDAO = holdingDAO;
         this.quotesService = quotesService;
+        this.fxRatesService = fxRatesService;
     }
 
     public Collection<Holding> allHoldings() {
@@ -37,14 +39,9 @@ public class HoldingsService {
 
         Map<String, List<QuoteDetail>> tickerCurrencyMap = quotesService.getQuotes(holdingsMap.keySet()).stream().collect(groupingBy(QuoteDetail::getSymbol));
 
-        Map<String, Double> fxRatesMap = new HashMap<>();
-        fxRatesMap.put("GBP", quotesService.getQuote("GBP=X").get().getLastTradePrice());
-        fxRatesMap.put("GBp", fxRatesMap.get("GBP") * 100); // add 'GBp' rate for pence rather than pounds
-        fxRatesMap.put("USD", 1.0);
-
         for (Holding holding: holdings) {
             String currency = tickerCurrencyMap.get(holding.getSymbol()).get(0).getCurrency();
-            BigDecimal fxRate = new BigDecimal(fxRatesMap.get(currency));
+            BigDecimal fxRate = new BigDecimal(fxRatesService.getRate(currency));
             BigDecimal marketValueBase = new BigDecimal(holding.getInitialMarketValue()).divide(fxRate, MathContext.DECIMAL64);
             holding.setInitialMarketValueBase(marketValueBase);
             holding.setCurrency(currency);

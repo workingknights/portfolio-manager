@@ -15,6 +15,7 @@ dbConfig:
 
 yahooConfig:
   apiUrl: http://query.yahooapis.com/v1/public/yql
+#  cacheTtl: 10000
 
 server:
   applicationConnectors:

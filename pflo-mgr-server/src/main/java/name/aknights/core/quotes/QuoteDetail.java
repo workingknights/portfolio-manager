@@ -100,16 +100,32 @@ public class QuoteDetail {
         this.percentChangeFromYearLow = percentChangeFromYearLow;
         this.percentChangeFromYearHigh = percentChangeFromYearHigh;
     }
+//
+//    /**
+//     * Used in tests
+//     */
+//    QuoteDetail(String symbol, Double lastTradePrice) {
+//        this.symbol = symbol;
+//        this.lastTradePrice = lastTradePrice;
+//    }
 
-    /*
-         * Used in tests
-         */
-    QuoteDetail(String symbol, Double lastTradePrice) {
+    /**
+     * Used in tests
+     */
+    public QuoteDetail(String symbol, String currency, Double previousClose, String change, String percentChange,
+                       String percentChangeFromYearLow, String percentChangeFromYearHigh, Double ma50Day, Double ma200Day) {
         this.symbol = symbol;
-        this.lastTradePrice = lastTradePrice;
+        this.currency = currency;
+        this.previousClose = previousClose;
+        this.change = change;
+        this.percentChange = percentChange;
+        this.percentChangeFromYearLow = percentChangeFromYearLow;
+        this.percentChangeFromYearHigh = percentChangeFromYearHigh;
+        this.ma50Day = ma50Day;
+        this.ma200Day = ma200Day;
     }
 
-    /*
+    /**
      * Used in tests
      */
     QuoteDetail(String percentChange, String percentChangeFromYearLow, String percentChangeFromYearHigh) {
