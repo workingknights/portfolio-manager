@@ -74,7 +74,7 @@ public class PortfolioService {
                 double rebal = targetMV - entry.getMarketValueBase();
                 entry.setRebalToModel(rebal);
 
-                int rebalShares = (int) (rebal / entry.getCurrPrice());
+                int rebalShares = (int) (rebal / (entry.getCurrPrice() / fxRatesService.getRate(entry.getCurrency())));
                 entry.setRebalShares(rebalShares);
             }
             else {
