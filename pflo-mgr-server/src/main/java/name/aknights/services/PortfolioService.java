@@ -134,11 +134,11 @@ public class PortfolioService {
     int checkMoveFromYearLowHigh(Double percentChangeFromYearLow, Double percentChangeFromYearHigh, Recommendation recommendation) {
         int adjust = 0;
 
-        if (percentChangeFromYearLow >= 0 && percentChangeFromYearLow < 8.0) {
+        if (percentChangeFromYearLow >= 0 && percentChangeFromYearLow < 7.0) {
             recommendation.addContributor("Very close to Year Low");
-            adjust += 3;
+            adjust += 4;
         }
-        else if (percentChangeFromYearLow >= 8.0 && percentChangeFromYearLow < 12.0) {
+        else if (percentChangeFromYearLow >= 7.0 && percentChangeFromYearLow < 11.0) {
             recommendation.addContributor("Close to Year Low");
             adjust += 2;
         }
@@ -149,7 +149,6 @@ public class PortfolioService {
             adjust -=2;
         }
         else if (percentChangeFromYearHigh <= -3.0 && percentChangeFromYearHigh > -6.0) adjust -=1;
-//        else if (percentChangeFromYearHigh <= -6.0 && percentChangeFromYearHigh > -12.0) adjust = -1;
 
         return adjust;
     }
@@ -177,7 +176,6 @@ public class PortfolioService {
 
     private double getTotalCost(List<Holding> holdings, QuoteDetail q) {
         double totalCost = holdings.stream().mapToDouble(Holding::getCost).sum();
-//        totalCost /= Currency.valueOf(q.getCurrency()).getFactor();
         return totalCost;
     }
 

@@ -40,7 +40,7 @@ public class CachingQuotesService implements QuotesService {
 
             if (unCachedTickers.size() > 0) {
                 Collection<QuoteDetail> fetchedQuotes = underlying.getQuotes(unCachedTickers);
-                // add them to the set of quotesToReturn
+                // addEntry them to the set of quotesToReturn
                 quotesToReturn.addAll(fetchedQuotes);
                 writeToCache(fetchedQuotes);
             }

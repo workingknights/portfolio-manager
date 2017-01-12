@@ -1,42 +1,33 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 import { Holding } from '.././holding';
-import { HoldingService } from '.././holding.service';
 
 @Component({
   selector: 'app-holding-form',
   templateUrl: './holding-form.component.html',
   styleUrls: ['./holding-form.component.css']
 })
-export class HoldingFormComponent implements OnInit {
+export class HoldingFormComponent {
 
-	@Output() added:EventEmitter<string> = new EventEmitter();
+	@Output() submitted:EventEmitter<Holding> = new EventEmitter();
 	@Output() closed:EventEmitter<string> = new EventEmitter();
 
-  protected model = new Holding('1', '', 1, 1.0, 0.0, Date.now(), 0.0, 0.0, '');
-  private submitted = false;
+  private holding = new Holding('1', '', 1, 1.0, 0.0, Date.now(), 0.0, 0.0, '');
+  private submittedForm = false;
 
-  constructor(
-    private holdingService: HoldingService,
-    private router: Router) {
-  }
-
-  ngOnInit() {
-  }
+  constructor() {}
 
   protected onSubmit() {
-    this.submitted = true;
+    this.submittedForm = true;
 
-    let symbol = this.model.symbol.trim();
+    let symbol = this.holding.symbol.trim();
     if (!symbol) { return; }
 
-    this.holdingService.create(this.model);
-		this.added.emit('complete');
+		this.submitted.emit(this.holding);
   }
 
   protected newHolding() {
-    this.model = new Holding('1', '', 1, 1.0, 0.0, Date.now(), 0.0, 0.0, '');
+    this.holding = new Holding('1', '', 1, 1.0, 0.0, Date.now(), 0.0, 0.0, '');
   }
 
 	protected closeForm() {

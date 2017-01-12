@@ -1,0 +1,45 @@
+<div class="container-fluid" *ngIf="auth.authenticated()">
+
+	<div class="row" *ngIf="!model">
+		<div class="col-sm-4">
+			<span class="mx-auto">No model exists yet</span>
+		</div>
+		<div class="col-sm-8">
+			<form>
+				<button class="btn btn-sm btn-outline-primary btn-margin-top" (click)="createModel()">Create Model</button>
+			</form>
+		</div>
+	</div>
+
+	<div class="row" *ngIf="model">
+		<div class="col-sm-12">
+			<form class="form-inline float-sm-left">
+				<button class="btn btn-sm btn-outline-primary btn-margin-top" (click)="openAddEntryForm()">Add Entry</button>
+			</form>
+		</div>
+	</div>
+	<div class="row" *ngIf="showAddEntryForm">
+		<div class="col-sm-12">
+			<div>
+				<app-model-entry-form (submitted)="saveEntry($event)" (closed)="showAddEntryForm=false"></app-model-entry-form>
+			</div>
+		</div>
+	</div>
+
+	<div class="row" *ngIf="model">
+		<div class="col-lg-4 col-sm-8 col-xs-12">
+			<swui-datatable class="material"
+				[rows]="model.entries"
+				[columnMode]="'flex'"
+				[rowHeight]="'auto'">
+				<swui-datatable-column prop="ticker" [flexGrow]="1"></swui-datatable-column>
+				<swui-datatable-column prop="portfolioWeight" [flexGrow]="1">
+					<template let-value="value" swui-datatable-cell-template>
+						{{value.toFixed(2)}}
+					</template>
+				</swui-datatable-column>
+			</swui-datatable>
+		</div>
+	</div>
+
+</div>

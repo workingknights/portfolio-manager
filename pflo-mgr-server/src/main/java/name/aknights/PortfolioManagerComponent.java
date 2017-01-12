@@ -5,6 +5,7 @@ import name.aknights.db.MongoModule;
 import name.aknights.health.MongoHealthCheck;
 import name.aknights.module.AuthModule;
 import name.aknights.resources.HoldingsResource;
+import name.aknights.resources.ModelResource;
 import name.aknights.resources.PortfolioResource;
 import name.aknights.resources.QuotesResource;
 import org.jose4j.jwt.consumer.JwtConsumer;
@@ -19,6 +20,7 @@ public interface PortfolioManagerComponent {
     HoldingsResource getHoldingsResource();
     QuotesResource getQuotesResource();
     PortfolioResource getPortfolioResource();
+    ModelResource getModelResource();
 
     Datastore getDatastore();
 

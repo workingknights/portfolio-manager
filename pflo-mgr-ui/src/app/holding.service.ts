@@ -28,13 +28,21 @@ export class HoldingService {
       .map(holdings => holdings.find(holding => holding.id === id));
   }
 
-  public create(holding: Holding): Observable<void> {
-    holding.id = "";
-    console.log('create() json=' + JSON.stringify(holding));
-    return this.authHttp
-      .post(this.holdingsUrl, JSON.stringify(holding))
-      .map(() => null)
-      .catch(this.handleError);
+  public create(holding: Holding): Observable<Boolean> {
+    console.log('Holding::create() json=' + JSON.stringify(holding));
+    // this.authHttp
+    //   .post(this.holdingsUrl, JSON.stringify(holding))
+    //   .subscribe(
+		// 		data => console.log(data),
+	  //     err => this.handleError(err),
+	  //     () => console.log('Request Complete')
+	  //   );
+
+			return this.authHttp.post(this.holdingsUrl, holding)
+	      .map((res: Response) => {
+					return true;
+				})
+	      .catch(this.handleError);
   }
 
   public delete(id: String): Observable<void> {
@@ -46,6 +54,8 @@ export class HoldingService {
   }
 
 	private handleError(error: Response | any) {
+		console.error('handleError()');
+
     // In a real world app, we might use a remote logging infrastructure
     let errMsg: string;
     if (error instanceof Response) {

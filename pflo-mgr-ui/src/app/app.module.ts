@@ -17,12 +17,15 @@ import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { HoldingService } from './holding.service';
 import { PortfolioService } from './portfolio.service';
+import { ModelService } from './model.service';
 import { HoldingsComponent } from './holdings/holdings.component';
 import { HoldingFormComponent } from './holding-form/holding-form.component';
 import { PortfolioEntryDetailComponent } from './portfolio-entry-detail/portfolio-entry-detail.component';
 import { AuthGuard } from './auth.guard';
 import { Auth } from './auth.service';
 import { PortfolioComponent } from './portfolio/portfolio.component';
+import { ModelComponent } from './model/model.component';
+import { ModelEntryFormComponent } from './model-entry-form/model-entry-form.component';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({
@@ -38,6 +41,8 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     HoldingFormComponent,
     PortfolioEntryDetailComponent,
     PortfolioComponent,
+    ModelComponent,
+    ModelEntryFormComponent,
   ],
   imports: [
     BrowserModule,
@@ -50,6 +55,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   providers: [
     HoldingService,
     PortfolioService,
+    ModelService,
 		Auth,
     AuthGuard,
     AUTH_PROVIDERS,

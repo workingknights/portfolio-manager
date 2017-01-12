@@ -17,11 +17,12 @@
       "prefix": "app",
       "mobile": false,
       "styles": [
-        "styles.css",
 		"../node_modules/angular2-data-table/release/datatable.css",
-		"../node_modules/angular2-data-table/release/material.css"
+		"../node_modules/angular2-data-table/release/material.css",
+		"styles.css"
       ],
-      "scripts": [],
+      "scripts": [
+			],
       "environments": {
         "source": "environments/environment.ts",
         "dev": "environments/environment.ts",

@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { PortfolioEntry } from '.././portfolioEntry';
 import { PortfolioService } from '.././portfolio.service';
+import { HoldingService } from '.././holding.service';
 import { Auth } from '../auth.service';
 
 @Component({
@@ -19,6 +20,7 @@ export class PortfolioComponent implements OnInit {
 
   constructor(
     private portfolioService: PortfolioService,
+    private holdingService: HoldingService,
     private appRef: ApplicationRef,
     private auth: Auth) {
   }
@@ -26,24 +28,31 @@ export class PortfolioComponent implements OnInit {
   public ngOnInit() {
     console.log('PortfolioComponent:ngOnInit() authenticated = ' + this.auth.authenticated());
     if (this.auth.authenticated()) {
-      this.refreshPortfolio();
+      this.loadPortfolio();
     }
   }
 
-  refresh(event) {
-    this.refreshPortfolio();
+  saveHolding(holding) {
+    this.holdingService.create(holding)
+      .subscribe(success => {
+        console.log('reload portfolio...');
+        this.loadPortfolio();
+      },
+      error => {
+        console.log(error);
+      });
   }
 
-  refreshPortfolio() {
-    console.log('refreshing portfolio');
-    this.portfolioService.getPortfolio()
+  loadPortfolio() {
+  	this.portfolioService.getPortfolio()
       .subscribe(portfolio => {
         this.portfolioEntries = portfolio.entries;
         this.summary = portfolio.summary;
       },
-      error => this.errorMessage = <any>error);
-
-    this.appRef.tick;
+      error => {
+        this.errorMessage = <any>error;
+        console.log(error);
+      });
   }
 
   openAddHoldingForm() {

@@ -8,7 +8,8 @@ import { Auth } from '../auth.service';
 @Component({
   selector: 'app-holdings',
   templateUrl: './holdings.component.html',
-  styleUrls: ['./holdings.component.css']
+  styleUrls: ['./holdings.component.css'],
+	providers: [ HoldingService ]
 })
 export class HoldingsComponent implements OnInit {
 

@@ -3,44 +3,55 @@ import { Router } from '@angular/router';
 import { tokenNotExpired } from 'angular2-jwt';
 
 import { authConfig } from './auth.config';
+import { environment } from '../environments/environment';
 
 // Avoid name not found warnings
 declare var Auth0Lock: any;
 
 @Injectable()
 export class Auth {
-  // Configure Auth0
-  lock = new Auth0Lock(authConfig.clientID, authConfig.domain, {});
+
+  private lock;
 
   // Store profile object in auth class
-  userProfile: Object;
+  private userProfile: Object;
 
   constructor(private router: Router) {
-    // Set userProfile attribute of already saved profile
-    this.userProfile = JSON.parse(localStorage.getItem('profile'));
+    if (environment.production) {
+      // Configure Auth0
+      this.lock = new Auth0Lock(authConfig.clientID, authConfig.domain, {});
 
-    // Add callback for lock `authenticated` event
-    this.lock.on('authenticated', (authResult) => {
-      localStorage.setItem('id_token', authResult.idToken);
-      // console.log('Auth:() - set token in local storage');
+      // Set userProfile attribute of already saved profile
+      this.userProfile = JSON.parse(localStorage.getItem('profile'));
 
-      // Fetch profile information
-      this.lock.getProfile(authResult.idToken, (error, profile) => {
-        if (error) {
-          console.log(error);
-        }
+      // Add callback for lock `authenticated` event
+      this.lock.on('authenticated', (authResult) => {
+        localStorage.setItem('id_token', authResult.idToken);
 
-        localStorage.setItem('profile', JSON.stringify(profile));
-				this.router.navigateByUrl('/portfolio', { skipLocationChange: true });
-        this.userProfile = profile;
+        // Fetch profile information
+        this.lock.getProfile(authResult.idToken, (error, profile) => {
+          if (error) {
+            console.log(error);
+          }
+
+          localStorage.setItem('profile', JSON.stringify(profile));
+          this.router.navigateByUrl('/portfolio', { skipLocationChange: true });
+          this.userProfile = profile;
+        });
+        this.lock.hide();
       });
-      this.lock.hide();
-    });
+    }
   }
 
   public login() {
     // Call the show method to display the widget.
-    this.lock.show();
+    if (environment.production) {
+      this.lock.show();
+    }
+    else {
+      localStorage.setItem('id_token', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJnb29nbGUtb2F1dGgyfDExODMwMDQwODMwMTA3NzYxNTI5MSIsImF1ZCI6IlQySFFVeFNVWFh1dGQxcmlnV3BVdmRFT05rZDVzMWdtIiwiaXNzIjoiaHR0cHM6Ly93b3JraW5na25pZ2h0cy5hdXRoMC5jb20vIiwiZXhwIjoxNDg4Mjk0MDAwLCJpYXQiOjE0ODMxOTY0MDB9.qdDMHPjNKjL-W_khcUwZiSYty-Q_bt0l5YWr3c0-GaU');
+    }
+    console.log('login() called.  authenticated = ' + tokenNotExpired());
   }
 
   public authenticated() {
@@ -56,6 +67,6 @@ export class Auth {
     this.userProfile = undefined;
 
     // Send the user back to the home page after logout
-		this.router.navigateByUrl('/');
+    this.router.navigateByUrl('/');
   }
 }

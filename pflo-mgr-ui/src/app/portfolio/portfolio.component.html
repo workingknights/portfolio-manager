@@ -1,5 +1,7 @@
 <div class="container-fluid" *ngIf="auth.authenticated()">
 
+	<span class="errMsg">{{errorMessage}}</span>
+
 	<div class="row" *ngIf="summary">
 		<div class=col-sm-4>
 			<ul class="list-group">
@@ -34,7 +36,7 @@
 	<div class="row" *ngIf="showAddHoldingForm">
 		<div class="col-sm-12">
 			<div>
-				<app-holding-form (added)="refreshPortfolio($event)" (closed)="showAddHoldingForm=false"></app-holding-form>
+				<app-holding-form (submitted)="saveHolding($event)" (closed)="showAddHoldingForm=false"></app-holding-form>
 			</div>
 		</div>
 	</div>
