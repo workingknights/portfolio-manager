@@ -19,6 +19,8 @@ public class PortfolioEntry {
     private Double yearLow;
     private Double yearHigh;
     private Recommendation recommendation;
+    private Double rebalToModel;
+    private Integer rebalShares;
     private Double currPrice;
     private Double ma50Day;
     private Double ma200Day;
@@ -127,4 +129,19 @@ public class PortfolioEntry {
         return recommendation;
     }
 
+    public void setRebalToModel(Double rebalToModel) {
+        this.rebalToModel = rebalToModel;
+    }
+
+    public Double getRebalToModel() {
+        return rebalToModel;
+    }
+
+    public Integer getRebalShares() {
+        return rebalShares;
+    }
+
+    public void setRebalShares(Integer rebalShares) {
+        this.rebalShares = rebalShares;
+    }
 }

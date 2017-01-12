@@ -23,7 +23,8 @@ public class PortfolioServiceTest {
         QuotesService quotesService = mock(QuotesService.class);
         FxRatesService fxRatesService = mock(FxRatesService.class);
         HoldingsService holdingsService = mock(HoldingsService.class);
-        service = new PortfolioService(quotesService, fxRatesService, holdingsService);
+        ModelService modelService = mock(ModelService.class);
+        service = new PortfolioService(quotesService, fxRatesService, holdingsService, modelService);
     }
 
     @Test

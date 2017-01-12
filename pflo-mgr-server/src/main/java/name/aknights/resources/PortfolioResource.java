@@ -30,7 +30,6 @@ public class PortfolioResource {
     @PermitAll
     @Timed
     public Response getPortfolio(@Auth Principal principal) {
-//        Data data = new Data(portfolioService.getPortfolio());
-        return Response.ok(portfolioService.getPortfolio()).build();
+        return Response.ok(portfolioService.getPortfolio(principal.getName())).build();
     }
 }

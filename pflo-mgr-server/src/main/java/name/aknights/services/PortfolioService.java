@@ -1,6 +1,8 @@
 package name.aknights.services;
 
 import name.aknights.api.Holding;
+import name.aknights.api.Model;
+import name.aknights.api.ModelEntry;
 import name.aknights.api.Portfolio;
 import name.aknights.api.PortfolioEntry;
 import name.aknights.core.Recommendation;
@@ -15,7 +17,6 @@ import java.util.Optional;
 
 import static java.util.stream.Collectors.groupingBy;
 import static name.aknights.core.Recommendation.Direction.BUY;
-import static name.aknights.core.Recommendation.Direction.HOLD;
 import static name.aknights.core.Recommendation.Direction.SELL;
 
 public class PortfolioService {
@@ -23,16 +24,25 @@ public class PortfolioService {
     private final QuotesService quotesService;
     private final FxRatesService fxRatesService;
     private final HoldingsService holdingsService;
+    private final ModelService modelService;
 
     @Inject
-    public PortfolioService(QuotesService quotesService, FxRatesService fxRatesService, HoldingsService holdingsService) {
+    public PortfolioService(QuotesService quotesService, FxRatesService fxRatesService, HoldingsService holdingsService, ModelService modelService) {
         this.quotesService = quotesService;
         this.fxRatesService = fxRatesService;
         this.holdingsService = holdingsService;
+        this.modelService = modelService;
     }
 
-    public Portfolio getPortfolio() {
+    public Portfolio getPortfolio(String userId) {
 
+        Portfolio portfolio = getBasicPortfolio(userId);
+        updateRequiredRebalances(portfolio.getEntries(), portfolio.getSummary().getMarketValueBase(), modelService.getModelForUser(userId));
+
+        return portfolio;
+    }
+
+    Portfolio getBasicPortfolio(String userId) {
         Map<String, List<Holding>> holdings =
                 holdingsService.allHoldings().stream().collect(groupingBy(Holding::getSymbol));
 
@@ -49,6 +59,29 @@ public class PortfolioService {
         PortfolioEntry summary = createSummaryRow(entries);
 
         return new Portfolio(entries, summary);
+    }
+
+    void updateRequiredRebalances(Collection<PortfolioEntry> portfolioEntries, double totalMarketValue, Model model) {
+        for(PortfolioEntry entry: portfolioEntries) {
+            Optional<ModelEntry> modelEntry;
+            if (model != null && model.getEntries() != null)
+                modelEntry = model.getEntries().stream().filter(m -> m.getTicker().equals(entry.getTicker())).findFirst();
+            else
+                modelEntry = Optional.empty();
+
+            if (modelEntry.isPresent()) {
+                double targetMV = totalMarketValue * (modelEntry.get().getPortfolioWeight()) / 100;
+                double rebal = targetMV - entry.getMarketValueBase();
+                entry.setRebalToModel(rebal);
+
+                int rebalShares = (int) (rebal / entry.getCurrPrice());
+                entry.setRebalShares(rebalShares);
+            }
+            else {
+                entry.setRebalToModel(0.0);
+                entry.setRebalShares(0);
+            }
+        }
     }
 
     private PortfolioEntry createSummaryRow(Collection<PortfolioEntry> entries) {
@@ -86,8 +119,10 @@ public class PortfolioService {
 
         return new PortfolioEntry(q.getSymbol(), q.getName(), totalNumShares,
                 q.getCurrency(), currPrice, q.getMa50Day(), q.getMa200Day(), q.getPercentChange(), dailyGainBase, totalCost, currMarketValue,
-                currMarketValueBase, totalPercentGain, totalGain, totalGainBase, q.getYearLow(), q.getYearHigh(), avgUnitCost, recommendation);
+                currMarketValueBase, totalPercentGain, totalGain, totalGainBase, q.getYearLow(), q.getYearHigh(), avgUnitCost,
+                recommendation);
     }
+
 
     Recommendation calcRecommendation(Double ma50Day, Double ma200Day, Double percentChange, Double percentChangeFromYearLow, Double percentChangeFromYearHigh) {
 

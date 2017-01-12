@@ -20,4 +20,12 @@ public class Portfolio {
         this.entries = entries;
         this.summary = summary;
     }
+
+    public Collection<PortfolioEntry> getEntries() {
+        return entries;
+    }
+
+    public PortfolioEntry getSummary() {
+        return summary;
+    }
 }

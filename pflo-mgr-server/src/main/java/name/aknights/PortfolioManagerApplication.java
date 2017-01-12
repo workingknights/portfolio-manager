@@ -85,6 +85,7 @@ public class PortfolioManagerApplication extends Application<PortfolioManagerCon
         environment.jersey().register(component.getQuotesResource());
         environment.jersey().register(component.getPortfolioResource());
         environment.jersey().register(component.getModelResource());
+        environment.jersey().register(component.getSandboxResource());
 
         environment.jersey().register(LogRequestFeature.class);
 

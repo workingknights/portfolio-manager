@@ -18,6 +18,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { HoldingService } from './holding.service';
 import { PortfolioService } from './portfolio.service';
 import { ModelService } from './model.service';
+import { SandboxService } from './sandbox.service';
 import { HoldingsComponent } from './holdings/holdings.component';
 import { HoldingFormComponent } from './holding-form/holding-form.component';
 import { PortfolioEntryDetailComponent } from './portfolio-entry-detail/portfolio-entry-detail.component';
@@ -26,6 +27,7 @@ import { Auth } from './auth.service';
 import { PortfolioComponent } from './portfolio/portfolio.component';
 import { ModelComponent } from './model/model.component';
 import { ModelEntryFormComponent } from './model-entry-form/model-entry-form.component';
+import { SandboxComponent } from './sandbox/sandbox.component';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({
@@ -43,6 +45,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     PortfolioComponent,
     ModelComponent,
     ModelEntryFormComponent,
+    SandboxComponent,
   ],
   imports: [
     BrowserModule,
@@ -56,6 +59,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     HoldingService,
     PortfolioService,
     ModelService,
+    SandboxService,
 		Auth,
     AuthGuard,
     AUTH_PROVIDERS,

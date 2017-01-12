@@ -1,0 +1,59 @@
+<div class="container-fluid" *ngIf="auth.authenticated()">
+
+	<div class="row">
+		<div class=col-sm-6>
+			<label>Scaled Market Value</label>
+			<input #scaledMVInput type="text" [(ngModel)]="scaledMV">
+			<button (click)="updateScaledMV(scaledMVInput.value)">Update</button>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-sm-12">
+			<swui-datatable
+				[rows]="portfolioEntries"
+				[columnMode]="'flex'"
+				[rowHeight]="'auto'"
+				class="material">
+				<swui-datatable-column prop="ticker" [flexGrow]="0.9"></swui-datatable-column>
+        <swui-datatable-column name="Shares" prop="totalShares" [flexGrow]="0.8"></swui-datatable-column>
+				<swui-datatable-column name="B/S" prop="recommendation.direction" [flexGrow]="0.8">
+					<template let-value="value" swui-datatable-cell-template>
+						<span [ngClass]="{greenCell: value === 'BUY', redCell: value === 'SELL'}">{{value}}</span>
+					</template>
+				</swui-datatable-column>
+        <swui-datatable-column name="Curr Price" prop="currPrice" [flexGrow]="1">
+					<template let-value="value" swui-datatable-cell-template>
+						<div style="text-align:right">{{value | number:'1.2-2'}}</div>
+					</template>
+				</swui-datatable-column>
+				<swui-datatable-column name="Total % Gain" prop="totalPercentGain" [flexGrow]="1">
+					<template let-value="value" swui-datatable-cell-template>
+						<div style="text-align:right">
+							<span [ngClass]="{greenCell: value > 0, redCell: value < 0}">{{value | percent:'1.2-2'}}</span>
+						</div>
+					</template>
+				</swui-datatable-column>
+				<swui-datatable-column name="Total Gain (Base)" prop="totalGainBase" [flexGrow]="1.3">
+					<template let-value="value" swui-datatable-cell-template>
+						<div style="text-align:right">
+							<span [ngClass]="{greenCell: value > 0, redCell: value < 0}">{{value | currency:'USD':true}}</span>
+						</div>
+					</template>
+				</swui-datatable-column>
+        <swui-datatable-column name="Market Val (Base)" prop="marketValueBase" [flexGrow]="1.3" >
+					<template let-value="value" swui-datatable-cell-template>
+						{{value | currency:'USD':true}}
+					</template>
+				</swui-datatable-column>
+				<swui-datatable-column name="Rebal" prop="rebalToModel" [flexGrow]="1" >
+					<template let-value="value" swui-datatable-cell-template>
+						<span [ngClass]="{greenCell: value > 0, redCell: value < 0}">{{value | currency:'USD':true}}</span>
+					</template>
+				</swui-datatable-column>
+				<swui-datatable-column name="Rebal Shares" prop="rebalShares" [flexGrow]="1"></swui-datatable-column>
+			</swui-datatable>
+		</div>
+	</div>
+
+</div>

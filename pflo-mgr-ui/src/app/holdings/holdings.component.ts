@@ -9,12 +9,12 @@ import { Auth } from '../auth.service';
   selector: 'app-holdings',
   templateUrl: './holdings.component.html',
   styleUrls: ['./holdings.component.css'],
-	providers: [ HoldingService ]
+  providers: [HoldingService]
 })
 export class HoldingsComponent implements OnInit {
 
   public holdings: Holding[] = [];
-	private errorMessage: string;
+  private errorMessage: string;
 
   constructor(
     private holdingService: HoldingService,
@@ -29,8 +29,11 @@ export class HoldingsComponent implements OnInit {
   refreshHoldingsList() {
     this.holdingService.getHoldings()
       // .then(holdings => this.holdings = holdings);
-      .subscribe(holdings => this.holdings = holdings,
-			error => this.errorMessage = <any>error);
+      .subscribe(holdings => {
+        let sortedHoldings = holdings.sort(this.tradeDateSort);
+				this.holdings = sortedHoldings;
+      },
+      error => this.errorMessage = <any>error);
   }
 
   delete(holding: Holding): void {
@@ -42,6 +45,18 @@ export class HoldingsComponent implements OnInit {
       .subscribe(() => {
         this.holdings = this.holdings.filter(h => h != holding);
       },
-			error => this.errorMessage = <any>error);
+      error => this.errorMessage = <any>error);
   }
+
+	private tradeDateSort(h1: Holding, h2: Holding) {
+		if (h1.tradeDate > h2.tradeDate) {
+			return -1;
+		}
+
+		if  (h1.tradeDate < h2.tradeDate) {
+			return 1;
+		}
+
+		return 0;
+	}
 }

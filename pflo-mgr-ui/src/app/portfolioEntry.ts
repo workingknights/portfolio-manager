@@ -21,6 +21,8 @@ export class PortfolioEntry {
 				public yearHigh: number,
 				public percentChange: number,
 				public dailyGainBase: number,
-				public recommendation: Recommendation
+				public recommendation: Recommendation,
+				public rebalToModel: number,
+				public rebalShares: number
     ) {}
 }

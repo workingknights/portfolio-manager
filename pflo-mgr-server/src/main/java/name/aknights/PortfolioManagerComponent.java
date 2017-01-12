@@ -8,6 +8,7 @@ import name.aknights.resources.HoldingsResource;
 import name.aknights.resources.ModelResource;
 import name.aknights.resources.PortfolioResource;
 import name.aknights.resources.QuotesResource;
+import name.aknights.resources.SandboxResource;
 import org.jose4j.jwt.consumer.JwtConsumer;
 import org.mongodb.morphia.Datastore;
 
@@ -21,6 +22,7 @@ public interface PortfolioManagerComponent {
     QuotesResource getQuotesResource();
     PortfolioResource getPortfolioResource();
     ModelResource getModelResource();
+    SandboxResource getSandboxResource();
 
     Datastore getDatastore();
 
