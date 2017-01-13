@@ -22,11 +22,6 @@
 						<span [ngClass]="{greenCell: value === 'BUY', redCell: value === 'SELL'}">{{value}}</span>
 					</template>
 				</swui-datatable-column>
-        <swui-datatable-column name="Curr Price" prop="currPrice" [flexGrow]="1">
-					<template let-value="value" swui-datatable-cell-template>
-						<div style="text-align:right">{{value | number:'1.2-2'}}</div>
-					</template>
-				</swui-datatable-column>
 				<swui-datatable-column name="Total % Gain" prop="totalPercentGain" [flexGrow]="1">
 					<template let-value="value" swui-datatable-cell-template>
 						<div style="text-align:right">
