@@ -1,10 +1,15 @@
 <div class="container-fluid" *ngIf="auth.authenticated()">
 
 	<div class="row">
-		<div class=col-sm-6>
-			<label>Scaled Market Value</label>
-			<input #scaledMVInput type="text" [(ngModel)]="scaledMV">
-			<button (click)="updateScaledMV(scaledMVInput.value)">Update</button>
+		<div class="col-sm-6">
+			<label for="scaled-mv">Scaled Market Value:</label>
+			<div class="input-group">
+  			<span class="input-group-addon">$</span>
+				<input #scaledMVInput id="scaled-mv" type="text" [(ngModel)]="scaledMV">
+				<span class="input-group-btn">
+       		<button (click)="updateScaledMV(scaledMVInput.value)" class="btn btn-sm btn-primary">Update</button>
+				</span>
+			</div>
 		</div>
 	</div>
 

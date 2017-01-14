@@ -6,39 +6,47 @@
 		</div>
 		<div class="col-sm-8">
 			<form>
-				<button class="btn btn-sm btn-outline-primary btn-margin-top" (click)="createModel()">Create Model</button>
+				<button class="btn btn-sm btn-primary btn-margin-top" (click)="createModel()">Create Model</button>
 			</form>
 		</div>
 	</div>
 
-	<div class="row" *ngIf="model">
-		<div class="col-sm-12">
-			<form class="form-inline float-sm-left">
-				<button class="btn btn-sm btn-outline-primary btn-margin-top" (click)="openAddEntryForm()">Add Entry</button>
-			</form>
-		</div>
-	</div>
-	<div class="row" *ngIf="showAddEntryForm">
-		<div class="col-sm-12">
-			<div>
-				<app-model-entry-form (submitted)="saveEntry($event)" (closed)="showAddEntryForm=false"></app-model-entry-form>
+	<div *ngIf="model" class="mt-sm-3">
+		<div class="row" >
+			<div class="col-sm-3">
+				<ul class="list-group">
+					<li class="list-group-item">
+						Total Weight: {{totalWeight | percent:'1.2-2'}}
+					</li>
+				</ul>
 			</div>
-		</div>
-	</div>
+		<!-- </div> -->
 
-	<div class="row" *ngIf="model">
-		<div class="col-lg-4 col-sm-8 col-xs-12">
-			<swui-datatable class="material"
-				[rows]="model.entries"
-				[columnMode]="'flex'"
-				[rowHeight]="'auto'">
-				<swui-datatable-column prop="ticker" [flexGrow]="1"></swui-datatable-column>
-				<swui-datatable-column prop="portfolioWeight" [flexGrow]="1">
-					<template let-value="value" swui-datatable-cell-template>
-						{{value.toFixed(2)}}
-					</template>
-				</swui-datatable-column>
-			</swui-datatable>
+			<!-- <div class="row" *ngIf="model"> -->
+				<div class="col-sm-3">
+					<button class="btn btn-primary mt-1" (click)="openAddEntryForm()">Add Entry</button>
+				</div>
+			</div>
+			<div class="row" *ngIf="showAddEntryForm">
+				<div class="col-sm-12">
+					<app-model-entry-form (submitted)="saveEntry($event)" (closed)="showAddEntryForm=false"></app-model-entry-form>
+				</div>
+			</div>
+
+		<div class="row">
+			<div class="col-lg-4 col-md-6 col-sm-8 col-xs-12">
+				<swui-datatable class="material"
+					[rows]="model.entries"
+					[columnMode]="'flex'"
+					[rowHeight]="'auto'">
+					<swui-datatable-column prop="ticker" [flexGrow]="1"></swui-datatable-column>
+					<swui-datatable-column prop="portfolioWeight" [flexGrow]="1">
+						<template let-value="value" swui-datatable-cell-template>
+							{{value | percent:'1.0-2'}}
+						</template>
+					</swui-datatable-column>
+				</swui-datatable>
+			</div>
 		</div>
 	</div>
 

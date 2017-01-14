@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 import { ModelEntry } from '.././model';
 
@@ -23,7 +23,12 @@ export class ModelEntryFormComponent {
     let ticker = this.modelEntry.ticker.trim();
     if (!ticker) { return; }
 
+		// convert to percentage
+		this.modelEntry.portfolioWeight = this.modelEntry.portfolioWeight / 100;
+
 		this.submitted.emit(this.modelEntry);
+
+		this.modelEntry = new ModelEntry('', 0.0);
   }
 
 	protected closeForm() {

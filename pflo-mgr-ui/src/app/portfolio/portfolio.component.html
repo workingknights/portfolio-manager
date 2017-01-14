@@ -1,6 +1,6 @@
 <div class="container-fluid" *ngIf="auth.authenticated()">
 
-	<span class="errMsg">{{errorMessage}}</span>
+	<span class="alert alert-warning" *ngIf="errorMessage">{{errorMessage}}</span>
 
 	<div class="row" *ngIf="summary">
 		<div class=col-sm-4>
@@ -29,7 +29,7 @@
 	<div class="row">
 		<div class="col-sm-12">
 			<form class="form-inline float-sm-left">
-				<button class="btn btn-sm btn-outline-primary btn-margin-top" (click)="openAddHoldingForm()">Add Holding</button>
+				<button class="btn btn-sm btn-primary btn-margin-top" (click)="openAddHoldingForm()">Add Holding</button>
 			</form>
 		</div>
 	</div>
@@ -47,6 +47,7 @@
 				[rows]="portfolioEntries"
 				[columnMode]="'flex'"
 				[rowHeight]="'auto'"
+				[scrollbarH]="true"
 				class="material">
 				<swui-datatable-column prop="ticker" [flexGrow]="0.9">
 					<template let-value="value" swui-datatable-cell-template>

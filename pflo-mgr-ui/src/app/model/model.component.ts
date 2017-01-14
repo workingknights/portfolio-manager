@@ -16,6 +16,7 @@ export class ModelComponent implements OnInit {
 
   private model: Model;
   private showAddEntryForm: boolean = false;
+	private totalWeight: number;
 
   constructor(
     private modelService: ModelService,
@@ -28,10 +29,21 @@ export class ModelComponent implements OnInit {
     }
   }
 
+	calcTotalWeight(): number {
+		let total = 0;
+		for (let entry of this.model.entries) {
+				total += entry.portfolioWeight;
+		}
+		return total;
+	}
+
   loadModel() {
     this.modelService.getModelForCurrentUser()
       .subscribe(
-      model => this.model = model,
+      model => {
+				this.model = model;
+				this.totalWeight = this.calcTotalWeight();
+			},
       error => console.log(error));
   }
 

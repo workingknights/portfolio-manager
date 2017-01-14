@@ -1,7 +1,6 @@
-<div *ngIf="portfolioEntry">
+<div *ngIf="portfolioEntry" class="portfolio-entry">
 	<div class="row">
 		<div class="col-sm-3 pflo-detail-header">
-			<!-- <label>{{portfolioEntry.ticker}}</label> -->
 			<a href="http://finance.yahoo.com/quote/{{portfolioEntry.ticker}}?ltr=1" target="_blank">{{portfolioEntry.ticker}}</a>
 		</div>
 		<div class="col-sm-9 pflo-detail-header">

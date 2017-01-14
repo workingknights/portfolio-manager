@@ -1,5 +1,5 @@
 <!-- <div class="container-fluid"> -->
-<nav class="navbar navbar-toggleable-sm navbar-light">
+<nav class="navbar navbar-toggleable-sm">
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar"
 		aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
 	  <span class="navbar-toggler-icon"></span>
@@ -21,7 +21,7 @@
 			</li>
 		</ul>
 		<form class="form-inline float-sm-right">
-			<span *ngIf="auth.authenticated() && auth.userProfile" class="align-middle" style="margin-right: 15px"><strong>Welcome: </strong> {{auth.userProfile.name}}</span>
+			<span *ngIf="auth.authenticated() && auth.userProfile" class="align-middle" style="margin-right: 15px">{{auth.userProfile.name}}</span>
 			<button class="btn btn-outline-primary" (click)="auth.login()" *ngIf="!auth.authenticated()">Log In</button>
 			<button class="btn btn-outline-primary" (click)="auth.logout()" *ngIf="auth.authenticated()">Log Out</button>
 		</form>
