@@ -8,6 +8,9 @@ h2 {
 	margin-bottom: 16px;
 	box-shadow: 0 2px 5px 0 rgba(0,0,0,0.24);
 }
+.navbar form span {
+	color: #fff;
+}
 a.navbar-brand {
 	color: #fff;
 }
