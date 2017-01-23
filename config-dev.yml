@@ -25,4 +25,9 @@ logging:
   level: INFO
   loggers:
     name.aknights: DEBUG
+  appenders:
+    - type: console
+      threshold: ALL
+      target: stdout
+      logFormat: "%-5level [%thread]: %logger{30} %message%n"
 

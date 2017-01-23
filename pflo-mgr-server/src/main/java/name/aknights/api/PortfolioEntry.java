@@ -29,7 +29,7 @@ public class PortfolioEntry {
     }
 
     public PortfolioEntry(String ticker, String name, Integer totalShares, String currency, Double currPrice,
-                          Double ma50Day, Double ma200Day, Double percentChange, Double dailyGainBase, Double totalCost,
+                          Double percentChange, Double dailyGainBase, Double totalCost,
                           Double marketValue, Double marketValueBase, Double totalPercentGain, Double totalGain,
                           Double totalGainBase, Double yearLow, Double yearHigh, Double avgUnitCost, Recommendation recommendation) {
         this.ticker = ticker;

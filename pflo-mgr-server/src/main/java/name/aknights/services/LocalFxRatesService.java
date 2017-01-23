@@ -13,7 +13,7 @@ public class LocalFxRatesService implements FxRatesService {
     }
 
     @Override
-    public Double getRate(String currency) {
-        return rateMap.get(currency);
+    public Double getRateToUsd(String fromCurrency) {
+        return rateMap.get(fromCurrency);
     }
 }

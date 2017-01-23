@@ -1,53 +1,74 @@
 package name.aknights.services;
 
-import name.aknights.config.YahooQuotesConfiguration;
-import name.aknights.core.quotes.QuoteDetail;
-import name.aknights.core.quotes.QuotesResponse;
+import name.aknights.api.Ticker;
+import name.aknights.config.QuotesServiceConfiguration;
+import name.aknights.core.Exchange;
+import name.aknights.core.quotes.Quote;
+import name.aknights.core.quotes.YahooQuoteDetail;
+import name.aknights.core.quotes.YahooQuotesResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 public class YahooQuotesService implements QuotesService {
 
+    public static final String YAHOO_EXCH_SUFFIX_LSE = ".LS";
     Logger logger = LoggerFactory.getLogger(YahooQuotesService.class);
 
     private Client client;
     private String apiUrl = "http://query.yahooapis.com/v1/public/yql";
 
     @Inject
-    public YahooQuotesService(Client client, YahooQuotesConfiguration yahooQuotesConfiguration) {
+    public YahooQuotesService(Client client, QuotesServiceConfiguration quotesServiceConfiguration) {
         this.client = client;
-        this.apiUrl = yahooQuotesConfiguration.getApiUrl();
+        this.apiUrl = quotesServiceConfiguration.getYahooApiUrl();
     }
 
     @Override
-    public Collection<QuoteDetail> getQuotes(Collection<String> tickers) {
-        String origSymbolQueryParam = String.format("select * from yahoo.finance.quotes where symbol in (%s)", String.join(",", tickers));
+    public Set<Quote> getQuotes(Set<Ticker> tickers) {
+        String origSymbolQueryParam = String.format("select * from yahoo.finance.quotes where symbol in (%s)", buildTickerQueryString(tickers));
         String symbolQueryParam = origSymbolQueryParam.replace(" ", "%20");
         symbolQueryParam = symbolQueryParam.replace("(", "%28%22");
         symbolQueryParam = symbolQueryParam.replace(")", "%22%29");
 
-        QuotesResponse quotesData = getQuotesResponse(symbolQueryParam);
+        YahooQuotesResponse quotesData = getQuotesResponse(symbolQueryParam);
 
-        return quotesData.getQuery().getResults().getQuote();
+        return new HashSet(quotesData.getQuery().getResults().getQuote());
+//        return new ArrayList<>(quoteDetails);
     }
 
     @Override
-    public Optional<QuoteDetail> getQuote(String ticker) {
-        String origSymbolQueryParam = String.format("select * from yahoo.finance.quotes where symbol = \"%s\"", ticker);
-        String symbolQueryParam = origSymbolQueryParam.replace(" ", "%20");
+    public Set<Quote> getQuote(Ticker... tickers) {
+        return getQuotes(new HashSet<>(Arrays.asList(tickers)));
 
-        QuotesResponse quotesData = getQuotesResponse(symbolQueryParam);
-
-        return quotesData.getQuery().getResults().getQuote().stream().findFirst();
     }
 
-    private QuotesResponse getQuotesResponse(String symbolQueryParam) {
+    String buildTickerQueryString(Set<Ticker> tickers) {
+        StringBuilder sb = new StringBuilder();
+
+        for (Ticker ticker: tickers) {
+            switch (Exchange.valueOf(ticker.getExchange())) {
+                case LSE: sb.append(ticker.getSymbol()).append(YAHOO_EXCH_SUFFIX_LSE); break;
+                default: sb.append(ticker.getSymbol()); break;
+            }
+            sb.append(",");
+        }
+
+        sb.deleteCharAt(sb.lastIndexOf(","));   // remove trailing ','
+
+        return sb.toString();
+    }
+
+    private YahooQuotesResponse getQuotesResponse(String symbolQueryParam) {
         if (logger.isDebugEnabled()) {
             logger.debug("full query = {}{}{}{}{}", apiUrl, "?q=", symbolQueryParam, "format=json", "env=store://datatables.org/alltableswithkeys");
         }
@@ -56,6 +77,6 @@ public class YahooQuotesService implements QuotesService {
             .queryParam("format", "json")
             .queryParam("env", "store://datatables.org/alltableswithkeys")
             .request(MediaType.APPLICATION_JSON)
-            .get(QuotesResponse.class);
+            .get(YahooQuotesResponse.class);
     }
 }

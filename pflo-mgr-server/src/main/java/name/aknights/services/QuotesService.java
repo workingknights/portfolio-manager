@@ -1,12 +1,14 @@
 package name.aknights.services;
 
-import name.aknights.core.quotes.QuoteDetail;
+import name.aknights.api.Ticker;
+import name.aknights.core.quotes.Quote;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.Set;
 
 public interface QuotesService {
-    Collection<QuoteDetail> getQuotes(Collection<String> tickers);
+    Collection<Quote> getQuotes(Set<Ticker> tickers);
 
-    Optional<QuoteDetail> getQuote(String ticker);
+    Collection<Quote> getQuote(Ticker... ticker);
 }

@@ -7,29 +7,31 @@ import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 
-public class QuoteDetailTest {
+public class YahooQuoteDetailTest {
 
     @Test
     public void withPositivePercentChangeStringsTheNumericValuesArePositive() {
-        QuoteDetail quoteDetail = new QuoteDetail("+5.0%", "+2.5%", "+6.23%");
+        YahooQuoteDetail quoteDetail = new YahooQuoteDetail();
+        quoteDetail.setPercentChange("+5.0%");
+        quoteDetail.setChange("+2.5");
         assertEquals(0.05, quoteDetail.getPercentChange(), 0.0);
-        assertEquals(2.5, quoteDetail.getPercentChangeFromYearLow(), 0.0);
-        assertEquals(6.23, quoteDetail.getPercentChangeFromYearHigh(), 0.0);
+        assertEquals(2.5, quoteDetail.getChange(), 0.0);
     }
 
     @Test
     public void withNegativePercentChangeStringsTheNumericValuesAreNegative() {
-        QuoteDetail quoteDetail = new QuoteDetail("-4.0%", "-3.75%", "-11.1%");
+        YahooQuoteDetail quoteDetail = new YahooQuoteDetail();
+        quoteDetail.setPercentChange("-4.0%");
+        quoteDetail.setChange("-3.75");
         assertEquals(-0.04, quoteDetail.getPercentChange(), 0.0);
-        assertEquals(-3.75, quoteDetail.getPercentChangeFromYearLow(), 0.0);
-        assertEquals(-11.1, quoteDetail.getPercentChangeFromYearHigh(), 0.0);
+        assertEquals(-3.75, quoteDetail.getChange(), 0.0);
     }
 
     @Test
     public void isCreatedIfJsonIsValid() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
 
-        QuoteDetail quoteDetail = mapper.readValue(jsonString, QuoteDetail.class);
+        YahooQuoteDetail quoteDetail = mapper.readValue(jsonString, YahooQuoteDetail.class);
 
         assertEquals("VWO", quoteDetail.getSymbol());
         assertEquals(36.40, quoteDetail.getPreviousClose().get(), 0.0);

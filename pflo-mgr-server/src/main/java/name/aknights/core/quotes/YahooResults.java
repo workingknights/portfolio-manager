@@ -8,15 +8,15 @@ import java.util.Collection;
  *          ]
  *          }
  */
-public class Results {
+public class YahooResults {
 
-    private Collection<QuoteDetail> quote;
+    private Collection<YahooQuoteDetail> quote;
 
-    public Collection<QuoteDetail> getQuote() {
+    public Collection<YahooQuoteDetail> getQuote() {
         return quote;
     }
 
-//    public void setQuote(Collection<QuoteDetail> quote) {
+//    public void setQuote(Collection<YahooQuoteDetail> quote) {
 //        this.quote = quote;
 //    }
 }

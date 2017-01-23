@@ -16,19 +16,19 @@ public class CachingFxRatesServiceTest {
     @Before
     public void setup() {
         underlier = new LocalFxRatesService();
-        service = new CachingFxRatesService(underlier, 200);
+        service = new CachingFxRatesService(200, underlier);
     }
 
     @Test
     public void whenValidCurrencyIsUsed_ThenRateIsNotNull() throws Exception {
-        Double rate = service.getRate("GBP");
+        Double rate = service.getRateToUsd("GBP");
         assertNotNull(rate);
     }
 
     @Test
     public void whenCacheWrittenToReadAndReadAgainFromAfterTTLExpired_ThenReadReturnsNothing() throws Exception {
         String currency = "GBP";
-        Double rate = underlier.getRate(currency);
+        Double rate = underlier.getRateToUsd(currency);
         service.writeToCache(currency, rate);
         assertTrue(service.readFromCache(currency).isPresent());
         Thread.sleep(250);
@@ -38,7 +38,7 @@ public class CachingFxRatesServiceTest {
     @Test
     public void whenCacheWrittenToAndReadFromAfterTTLExpired_ThenReadReturnsNothing() throws Exception {
         String currency = "GBP";
-        Double rate = underlier.getRate(currency);
+        Double rate = underlier.getRateToUsd(currency);
 
         service.writeToCache(currency, rate);
         Thread.sleep(250);  // wait for cache to expire
@@ -48,12 +48,12 @@ public class CachingFxRatesServiceTest {
     @Test
     public void whenCacheWrittenToReadFromAndWrittenToAgainBeforeTTLExpired_ThenReadReturnsData() throws Exception {
         String currency = "GBP";
-        Double rate = underlier.getRate(currency);
+        Double rate = underlier.getRateToUsd(currency);
 
         service.writeToCache(currency, rate);
         assertTrue(service.readFromCache(currency).isPresent());
 
-        service.writeToCache("USD", underlier.getRate("USD"));
+        service.writeToCache("USD", underlier.getRateToUsd("USD"));
         assertTrue(service.readFromCache("GBP").isPresent());
         assertTrue(service.readFromCache("USD").isPresent());
     }

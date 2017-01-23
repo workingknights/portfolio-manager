@@ -19,6 +19,7 @@ import { HoldingService } from './holding.service';
 import { PortfolioService } from './portfolio.service';
 import { ModelService } from './model.service';
 import { SandboxService } from './sandbox.service';
+import { TickerService } from './ticker.service';
 import { HoldingsComponent } from './holdings/holdings.component';
 import { HoldingFormComponent } from './holding-form/holding-form.component';
 import { PortfolioEntryDetailComponent } from './portfolio-entry-detail/portfolio-entry-detail.component';
@@ -28,6 +29,9 @@ import { PortfolioComponent } from './portfolio/portfolio.component';
 import { ModelComponent } from './model/model.component';
 import { ModelEntryFormComponent } from './model-entry-form/model-entry-form.component';
 import { SandboxComponent } from './sandbox/sandbox.component';
+import { TickersComponent } from './tickers/tickers.component';
+import { Utils } from './utils';
+import { TickerDetailFormComponent } from './ticker-detail-form/ticker-detail-form.component';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({
@@ -46,6 +50,8 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     ModelComponent,
     ModelEntryFormComponent,
     SandboxComponent,
+    TickersComponent,
+    TickerDetailFormComponent,
   ],
   imports: [
     BrowserModule,
@@ -60,7 +66,9 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     PortfolioService,
     ModelService,
     SandboxService,
+		TickerService,
 		Auth,
+		Utils,
     AuthGuard,
     AUTH_PROVIDERS,
     {

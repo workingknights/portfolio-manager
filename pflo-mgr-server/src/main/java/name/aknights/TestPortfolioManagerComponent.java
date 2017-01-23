@@ -4,22 +4,15 @@ import dagger.Component;
 import name.aknights.db.MongoModule;
 import name.aknights.health.MongoHealthCheck;
 import name.aknights.module.AuthModule;
-import name.aknights.resources.HoldingsResource;
-import name.aknights.resources.PortfolioResource;
-import name.aknights.resources.QuotesResource;
-import org.jose4j.jwt.consumer.JwtConsumer;
+import name.aknights.module.QuotesModule;
 import org.mongodb.morphia.Datastore;
 
 import javax.inject.Singleton;
 
 @Singleton
-@Component(modules = {PortfolioManagerModule.class, LocalQuotesModule.class, AuthModule.class, MongoModule.class})
+@Component(modules = {PortfolioManagerModule.class, QuotesModule.class, AuthModule.class, MongoModule.class})
 public interface TestPortfolioManagerComponent extends PortfolioManagerComponent {
     // Resources
-    HoldingsResource getHoldingsResource();
-    QuotesResource getQuotesResource();
-    PortfolioResource getPortfolioResource();
-
     Datastore getDatastore();
 
     MongoHealthCheck getMongoHealthCheck();

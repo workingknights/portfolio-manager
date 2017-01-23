@@ -14,8 +14,8 @@ import { Model, ModelEntry } from './model';
 export class ModelService {
 
   constructor(
-		private auth: Auth,
-		private authHttp: AuthHttp) { }
+    private auth: Auth,
+    private authHttp: AuthHttp) { }
 
   private modelUrl = 'api/model';
 
@@ -27,21 +27,21 @@ export class ModelService {
         } else {
           return Observable.throw(new Error('Unexpected response status! [' + res.status + ']'));
         }
-			})
+      })
       .catch(this.handleError);
   }
 
-	public getModelForCurrentUser(): Observable<Model> {
-		return this.authHttp.get(this.modelUrl)
-			.map(res => res.json() as Model);
-	}
+  public getModelForCurrentUser(): Observable<Model> {
+    return this.authHttp.get(this.modelUrl)
+      .map(res => res.json() as Model);
+  }
 
-	public createModel(): Observable<Model> {
-		let newModel = new Model('', '', []);
+  public createModel(): Observable<Model> {
+    let newModel = new Model('', '', []);
     return this.authHttp.post(this.modelUrl, newModel)
       .flatMap((res: Response) => {
         let location = res.headers.get('Location');
-				console.log('loading model from location: ' + location);
+        console.log('loading model from location: ' + location);
         return this.authHttp.get(location);
       })
       .map((res: Response) => res.json())
@@ -75,22 +75,14 @@ export class ModelService {
 
     const url = `${this.modelUrl}/${modelId}/entry`;
 
-    // this.authHttp
-    //   .put(url + '', JSON.stringify(modelEntry))
-    //   .subscribe(
-    //   data => console.log(data),
-    //   err => this.handleError(err),
-    //   () => console.log('Request Complete')
-    //   );
-
-			return this.authHttp.put(url, modelEntry)
-	      .flatMap((res: Response) => {
-	        return this.authHttp.get(`${this.modelUrl}/${modelId}`);
-	      })
-	      .map((res: Response) => {
-					return res.json() as Model;
-				})
-	      .catch(this.handleError);
+    return this.authHttp.put(url, modelEntry)
+      .flatMap((res: Response) => {
+        return this.authHttp.get(`${this.modelUrl}/${modelId}`);
+      })
+      .map((res: Response) => {
+        return res.json() as Model;
+      })
+      .catch(this.handleError);
   }
 
   private handleError(error: Response | any) {

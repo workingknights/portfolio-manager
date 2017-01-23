@@ -14,6 +14,7 @@ import name.aknights.core.BasicAuthenticator;
 import name.aknights.core.auth.User;
 import name.aknights.db.MongoModule;
 import name.aknights.module.AuthModule;
+import name.aknights.module.QuotesModule;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +51,7 @@ public class PortfolioManagerApplication extends Application<PortfolioManagerCon
 
         if (configuration.getEnv() == null || configuration.getEnv().equalsIgnoreCase("prod")) {
             component = DaggerPortfolioManagerComponent.builder()
-                    .yahooQuotesModule(new YahooQuotesModule(configuration.getYahooConfig()))
+                    .quotesModule(new QuotesModule(configuration.getQuotesConfig()))
                     .mongoModule(new MongoModule(configuration.getDbConfig(), environment))
                     .authModule(new AuthModule(configuration))
                     .build();
@@ -58,6 +59,7 @@ public class PortfolioManagerApplication extends Application<PortfolioManagerCon
         else {
             logger.info("*** Building Test Instance of PortfolioManager ***");
             component = DaggerTestPortfolioManagerComponent.builder()
+                    .quotesModule(new QuotesModule(configuration.getQuotesConfig()))
                     .mongoModule(new MongoModule(configuration.getDbConfig(), environment))
                     .authModule(new AuthModule(configuration))
                     .build();
@@ -82,10 +84,10 @@ public class PortfolioManagerApplication extends Application<PortfolioManagerCon
         environment.jersey().setUrlPattern("/api/*");
 
         environment.jersey().register(component.getHoldingsResource());
-        environment.jersey().register(component.getQuotesResource());
         environment.jersey().register(component.getPortfolioResource());
         environment.jersey().register(component.getModelResource());
         environment.jersey().register(component.getSandboxResource());
+        environment.jersey().register(component.getTickerResource());
 
         environment.jersey().register(LogRequestFeature.class);
 

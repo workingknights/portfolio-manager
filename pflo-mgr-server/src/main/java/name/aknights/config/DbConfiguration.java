@@ -26,6 +26,17 @@ public class DbConfiguration {
     @JsonProperty
     private String password;
 
+    public DbConfiguration() {
+    }
+
+    public DbConfiguration(String dbName, int port, String host, String user, String password) {
+        this.dbName = dbName;
+        this.port = port;
+        this.host = host;
+        this.user = user;
+        this.password = password;
+    }
+
     public String getDbName() {
         return dbName;
     }

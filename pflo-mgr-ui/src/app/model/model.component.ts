@@ -1,5 +1,4 @@
 import { Component, OnInit, ApplicationRef } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
 
 import { Model } from '.././model';
 import { ModelService } from '.././model.service';
@@ -65,7 +64,7 @@ export class ModelComponent implements OnInit {
       );
   }
 
-  openAddEntryForm(modelId: String) {
+  openAddEntryForm() {
     this.showAddEntryForm = true;
   }
 }

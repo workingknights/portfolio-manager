@@ -5,6 +5,8 @@ import { PortfolioEntry } from '.././portfolioEntry';
 import { PortfolioService } from '.././portfolio.service';
 import { HoldingService } from '.././holding.service';
 import { Auth } from '../auth.service';
+import { Holding } from '../holding';
+import { Ticker } from '../ticker';
 
 @Component({
   selector: 'app-portfolio',
@@ -13,8 +15,11 @@ import { Auth } from '../auth.service';
 })
 export class PortfolioComponent implements OnInit {
 
-  public portfolioEntries: PortfolioEntry[] = [];
-  public summary: PortfolioEntry;
+  private portfolioEntries: PortfolioEntry[] = [];
+  private summary: PortfolioEntry;
+
+	private newHolding: Holding = new Holding('', new Ticker('', '', '', '', ''), 1, 1.0, 0.0,
+		Date.now(), 0.0, 0.0);
   private showAddHoldingForm = false;
   private errorMessage: string;
 
@@ -33,14 +38,19 @@ export class PortfolioComponent implements OnInit {
   }
 
   saveHolding(holding) {
+		console.log('Portfolio:saveHolding() - holding = ', holding);
     this.holdingService.create(holding)
-      .subscribe(success => {
+      .subscribe(holding => {
         console.log('reload portfolio...');
         this.loadPortfolio();
       },
       error => {
         console.log(error);
       });
+
+			this.newHolding = new Holding('', new Ticker('', '', '', '', ''), 1, 1.0, 0.0,
+				Date.now(), 0.0, 0.0);
+			this.showAddHoldingForm = false;
   }
 
   loadPortfolio() {
@@ -55,7 +65,5 @@ export class PortfolioComponent implements OnInit {
       });
   }
 
-  openAddHoldingForm() {
-    this.showAddHoldingForm = true;
-  }
+
 }

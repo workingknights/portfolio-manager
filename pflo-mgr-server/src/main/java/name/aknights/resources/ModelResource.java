@@ -70,8 +70,7 @@ public class ModelResource {
 
     @POST
     @PermitAll
-    public Response createModel(@NotNull Model model, @Context ServletContext servletContext, @Context HttpServletRequest request,
-                                @Auth Principal principal) {
+    public Response createModel(@NotNull Model model, @Context HttpServletRequest request, @Auth Principal principal) {
         model.setUserId(principal.getName());
         String uuid = modelService.createModel(model);
         URI location = UriBuilder.fromPath(request.getRequestURI()).path(uuid).build();

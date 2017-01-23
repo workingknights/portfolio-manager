@@ -10,25 +10,33 @@ import static org.junit.Assert.*;
 public class HoldingTest {
 
     @Test
-    public void whenJsonIsValidHoldingIsCreated() throws IOException {
-        String json = "{\"id\":\"\",\n" +
-                "\"symbol\":\"VJPN.L\",\n" +
-                "\"shares\":10,\n" +
-                "\"tradePrice\":14.6,\n" +
-                "\"commission\":0.25,\n" +
-                "\"tradeDate\":\"2016-12-16\",\n" +
-                "\"initialMarketValue\":0\n" +
-                "}";
+    public void whenJsonIsValidForExistingHoldingThenItIsCreated() throws IOException {
+        String json = "{\"id\":\"58816e3c359886257795f254\",\"ticker\":{\"id\":\"5880a81b35988618e2f7d269\",\"symbol\":\"VWO\",\"currency\":\"USD\",\"exchange\":\"NYSEARCA\",\"fullName\":\"Vanguard FTSE Emerging Markets ETF\"},\"symbol\":null,\"shares\":60,\"tradeDate\":1484877366659,\"tradePrice\":23,\"commission\":0,\"initialMarketValue\":138,\"initialMarketValueBase\":138,\"cost\":138,\"$$index\":0}";
 
         ObjectMapper mapper = new ObjectMapper();
         Holding holding = mapper.readValue(json, Holding.class);
 
         assertNotNull(holding);
-        assertEquals(146.0, holding.getInitialMarketValue(), 0.0);
+        assertEquals(60, holding.getShares());
+        assertEquals("58816e3c359886257795f254", holding.getId());
+        assertEquals("VWO", holding.getTicker().getSymbol());
+        assertEquals("5880a81b35988618e2f7d269", holding.getTicker().getId());
 
-        String outputJson = mapper.writeValueAsString(holding);
-        assertNotNull(outputJson);
-        assertTrue(outputJson.contains("initialMarketValue\":146.0"));
+//        String outputJson = mapper.writeValueAsString(holding);
+//        assertNotNull(outputJson);
+//        assertTrue(outputJson.contains("initialMarketValue\":146.0"));
+    }
+
+    @Test
+    public void whenJsonIsValidForNewHoldingThenItIsCreated() throws IOException {
+        String json = "{\"id\":\"\",\"ticker\":{\"id\":\"\",\"symbol\":\"VUSA\",\"currency\":\"\",\"exchange\":\"\",\"fullName\":\"\"},\"shares\":15,\"tradePrice\":34.5,\"commission\":0,\"tradeDate\":1484886786608,\"initialMarketValue\":0,\"initialMarketValueBase\":0}";
+
+        ObjectMapper mapper = new ObjectMapper();
+        Holding holding = mapper.readValue(json, Holding.class);
+
+        assertNotNull(holding);
+        assertEquals(15, holding.getShares());
+        assertEquals("VUSA", holding.getTicker().getSymbol());
     }
 
 }

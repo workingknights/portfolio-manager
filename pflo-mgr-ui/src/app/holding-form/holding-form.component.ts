@@ -1,33 +1,44 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { Holding } from '.././holding';
+import { Ticker } from '.././ticker';
 
 @Component({
-  selector: 'app-holding-form',
+  selector: 'holding-detail-form',
   templateUrl: './holding-form.component.html',
   styleUrls: ['./holding-form.component.css']
 })
 export class HoldingFormComponent {
 
+	@Input() editing: boolean;
 	@Output() submitted:EventEmitter<Holding> = new EventEmitter();
 	@Output() closed:EventEmitter<string> = new EventEmitter();
 
-  private holding = new Holding('1', '', 1, 1.0, 0.0, Date.now(), 0.0, 0.0, '');
-  private submittedForm = false;
+  private _holding = new Holding('', new Ticker('', '', '', '', ''), 1, 1.0, 0.0,
+		Date.now(), 0.0, 0.0);
+  // private submittedForm = false;
 
-  constructor() {}
+	@Input()
+	set holding(holding: Holding) {
+		this._holding = holding;
+	}
+
+	get holding(): Holding { return this._holding; }
 
   protected onSubmit() {
-    this.submittedForm = true;
+    // this.submittedForm = true;
 
-    let symbol = this.holding.symbol.trim();
+    let symbol = this.holding.ticker.symbol.trim();
     if (!symbol) { return; }
 
 		this.submitted.emit(this.holding);
+
+		this.newHolding();
   }
 
   protected newHolding() {
-    this.holding = new Holding('1', '', 1, 1.0, 0.0, Date.now(), 0.0, 0.0, '');
+    this.holding = new Holding('', new Ticker('', '', '', '', ''), 1, 1.0, 0.0,
+			Date.now(), 0.0, 0.0);
   }
 
 	protected closeForm() {

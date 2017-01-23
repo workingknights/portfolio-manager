@@ -9,11 +9,16 @@ import { AuthHttp } from 'angular2-jwt';
 
 import { Auth } from './auth.service';
 import { Holding } from './holding';
+import { Utils } from './utils';
 
 @Injectable()
 export class HoldingService {
 
-  constructor(private auth: Auth, private authHttp: AuthHttp) { }
+  constructor(
+    private auth: Auth,
+    private authHttp: AuthHttp,
+    private utils: Utils
+  ) { }
 
   private holdingsUrl = 'api/holding';
 
@@ -28,13 +33,28 @@ export class HoldingService {
       .map(holdings => holdings.find(holding => holding.id === id));
   }
 
-  public create(holding: Holding): Observable<Boolean> {
-    console.log('Holding::create() json=' + JSON.stringify(holding));
+  public create(holding: Holding): Observable<Holding> {
+    console.log('HoldingService:create() json=' + JSON.stringify(holding));
     return this.authHttp.post(this.holdingsUrl, holding)
-      .map((res: Response) => {
-        return true;
+		.flatMap((res: Response) => {
+			let location = res.headers.get('Location');
+			return this.authHttp.get(location);
+		})
+		.map((res: Response) => res.json())
+		.catch(this.utils.handleError);
+  }
+
+  public updateHolding(holding: Holding): Observable<Holding> {
+		console.log('HoldingService:updateHolding() json=' + JSON.stringify(holding));
+
+		const url = `${this.holdingsUrl}/${holding.id}`;
+
+    return this.authHttp.put(url, holding)
+      .flatMap((res: Response) => {
+        return this.authHttp.get(url);
       })
-      .catch(this.handleError);
+      .map((res: Response) => res.json())
+      .catch(this.utils.handleError);
   }
 
   public delete(id: String): Observable<void> {

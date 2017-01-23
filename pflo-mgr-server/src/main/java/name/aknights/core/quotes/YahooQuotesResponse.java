@@ -11,10 +11,10 @@ package name.aknights.core.quotes;
  *   }
  * }
  */
-public class QuotesResponse {
-    private Query query;
+public class YahooQuotesResponse {
+    private YahooQuery query;
 
-    public Query getQuery() {
+    public YahooQuery getQuery() {
         return query;
     }
 }

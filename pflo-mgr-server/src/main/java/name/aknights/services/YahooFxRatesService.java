@@ -1,47 +1,44 @@
 package name.aknights.services;
 
-import name.aknights.config.YahooQuotesConfiguration;
-import name.aknights.core.quotes.QuoteDetail;
-import name.aknights.core.quotes.QuotesResponse;
+import name.aknights.api.Ticker;
+import name.aknights.config.QuotesServiceConfiguration;
+import name.aknights.core.Currency;
+import name.aknights.core.quotes.Quote;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.ws.rs.client.Client;
-import javax.ws.rs.core.MediaType;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.Set;
 
 public class YahooFxRatesService extends YahooQuotesService implements FxRatesService {
 
     Logger logger = LoggerFactory.getLogger(YahooFxRatesService.class);
 
     @Inject
-    public YahooFxRatesService(Client client, YahooQuotesConfiguration yahooQuotesConfiguration) {
-        super(client, yahooQuotesConfiguration);
+    public YahooFxRatesService(Client client, QuotesServiceConfiguration quotesServiceConfiguration) {
+        super(client, quotesServiceConfiguration);
     }
 
     @Override
-    public Double getRate(String currency) {
-        if (currency.equals("GBp")) {
-            Optional<QuoteDetail> quote = this.getQuote("GBP=X");
-            if (quote.isPresent()) {
-                return quote.get().getLastTradePrice()*100;
-            } else {
-                logger.warn("No FX rate found to USD for {} currency", currency);
-                return 1.0;
+    public Double getRateToUsd(String fromCurrency) {
+        Currency currency = fromCurrency == null ? Currency.USD : Currency.valueOf(fromCurrency);
+        Set<Quote> quotes;
+
+        switch (currency) {
+            case GBp: {
+                quotes = this.getQuote(new Ticker("GBP=X", null, "", null));
+                break;
+            }
+            default: {
+                quotes = this.getQuote(new Ticker(fromCurrency + "=X", null, "", null));
+                break;
             }
         }
-        else {
-            Optional<QuoteDetail> quote = this.getQuote(currency + "=X");
-            if (quote.isPresent()) {
-                return quote.get().getLastTradePrice();
-            } else {
-                logger.warn("No FX rate found to USD for {} currency", currency);
-                return 1.0;
-            }
-        }
+
+        if (!quotes.isEmpty())
+            return quotes.iterator().next().getLastPrice() * currency.getFactor();
+        else
+            return 1.0;
     }
 }

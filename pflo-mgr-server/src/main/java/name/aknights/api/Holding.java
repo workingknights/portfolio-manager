@@ -1,8 +1,8 @@
 package name.aknights.api;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.bson.types.ObjectId;
-import org.hibernate.validator.constraints.Length;
 import org.mongodb.morphia.annotations.*;
 
 import javax.validation.constraints.Min;
@@ -11,16 +11,14 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity("holdings")
-@Indexes(
-        @Index(value = "symbol", fields = @Field("symbol"))
-)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Holding {
 
     @Id
     private ObjectId id;
 
-    @Length(max = 6)
-    private String symbol;
+    @Reference
+    private Ticker ticker;
 
     @Min(0)
     private int shares;
@@ -36,17 +34,14 @@ public class Holding {
     private Double initialMarketValue;
 
     @NotSaved
-    private BigDecimal initialMarketValueBase;
-
-    @NotSaved
-    private String currency;
+    private Double initialMarketValueBase;
 
     public Holding() {
     }
 
     /* For use in tests */
-    public Holding(String symbol, int shares, Date tradeDate, Double tradePrice, Double commission) {
-        this.symbol = symbol;
+    public Holding(Ticker ticker, int shares, Date tradeDate, Double tradePrice, Double commission) {
+        this.ticker = ticker;
         this.shares = shares;
         this.tradeDate = tradeDate;
         this.tradePrice = tradePrice;
@@ -61,12 +56,17 @@ public class Holding {
 
     @JsonProperty
     public void setId(String id) {
-        this.id = null;
+        this.id = (id == null || id.isEmpty()) ? null : new ObjectId(id);
     }
 
     @JsonProperty
-    public String getSymbol() {
-        return symbol;
+    public Ticker getTicker() {
+        return ticker;
+    }
+
+    @JsonProperty
+    public void setTicker(Ticker ticker) {
+        this.ticker = ticker;
     }
 
     @JsonProperty
@@ -105,11 +105,6 @@ public class Holding {
     }
 
     @JsonProperty
-    public void setSymbol(String symbol) {
-        this.symbol = symbol;
-    }
-
-    @JsonProperty
     public void setShares(int shares) {
         this.shares = shares;
     }
@@ -132,34 +127,24 @@ public class Holding {
     @Override
     public String toString() {
         return "Holding{" +
-                "id=" + getId() +
-                ", symbol='" + symbol + '\'' +
+                "id=" + id +
+                ", ticker ='" + ticker + '\'' +
                 ", shares=" + shares +
                 ", tradeDate=" + tradeDate +
                 ", tradePrice=" + tradePrice +
                 ", commission=" + commission +
-                ", initialMarketValue=" + getInitialMarketValue() +
-                ", initialMarketValueBase=" + getInitialMarketValueBase() +
+                ", initialMarketValue=" + initialMarketValue +
+                ", initialMarketValueBase=" + initialMarketValueBase +
                 '}';
     }
 
     @JsonProperty
-    public void setInitialMarketValueBase(BigDecimal initialMarketValueBase) {
+    public void setInitialMarketValueBase(Double initialMarketValueBase) {
         this.initialMarketValueBase = initialMarketValueBase;
     }
 
     @JsonProperty
-    public BigDecimal getInitialMarketValueBase() {
+    public Double getInitialMarketValueBase() {
         return initialMarketValueBase;
-    }
-
-    @JsonProperty
-    public String getCurrency() {
-        return currency;
-    }
-
-    @JsonProperty
-    public void setCurrency(String currency) {
-        this.currency = currency;
     }
 }

@@ -16,10 +16,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  * }
  */
 @JsonIgnoreProperties(ignoreUnknown=true)
-public class Query {
+public class YahooQuery {
     private int count;
     private String created;
-    private Results results;
+    private YahooResults results;
 
     public int getCount() {
         return count;
@@ -37,11 +37,11 @@ public class Query {
         this.created = created;
     }
 
-    public Results getResults() {
+    public YahooResults getResults() {
         return results;
     }
 
-    public void setResults(Results results) {
+    public void setResults(YahooResults results) {
         this.results = results;
     }
 }

@@ -2,6 +2,7 @@ package name.aknights.config;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.Configuration;
+import name.aknights.services.QuotesService;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.Valid;
@@ -19,6 +20,10 @@ public class PortfolioManagerConfiguration extends Configuration {
     @Valid
     @JsonProperty
     private YahooQuotesConfiguration yahooConfig;
+
+    @Valid
+    @JsonProperty
+    private QuotesServiceConfiguration quotesConfig;
 
     @NotEmpty
     @JsonProperty
@@ -46,5 +51,9 @@ public class PortfolioManagerConfiguration extends Configuration {
 
     public YahooQuotesConfiguration getYahooConfig() {
         return yahooConfig;
+    }
+
+    public QuotesServiceConfiguration getQuotesConfig() {
+        return quotesConfig;
     }
 }

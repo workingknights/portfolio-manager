@@ -16,7 +16,7 @@ public class QuotesResponseTest {
 
         // Convert JSON string from file to Object
         InputStream resource = this.getClass().getResourceAsStream("/validQuote.json");
-        QuotesResponse response = mapper.readValue(resource, QuotesResponse.class);
+        YahooQuotesResponse response = mapper.readValue(resource, YahooQuotesResponse.class);
 
         assertEquals(3, response.getQuery().getResults().getQuote().size());
     }

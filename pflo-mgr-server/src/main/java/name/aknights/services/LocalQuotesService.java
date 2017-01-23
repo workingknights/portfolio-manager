@@ -1,42 +1,45 @@
 package name.aknights.services;
 
-import name.aknights.core.quotes.QuoteDetail;
+import name.aknights.api.Ticker;
+import name.aknights.core.quotes.Quote;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public class LocalQuotesService implements QuotesService {
 
-    private QuoteDetail gbpFxRate = generateQuote("GBP=X", "GBP");
+    private Quote gbpToUsdFxRate = generateQuote(new Ticker("^GBPUSD", "", "", ""));
 
     @Override
-    public Collection<QuoteDetail> getQuotes(Collection<String> tickers) {
-        List<QuoteDetail> quotes = new ArrayList<>();
-        for (String ticker: tickers) {
-            QuoteDetail quote = generateQuote(ticker, ccy());
-
-            quotes.add(quote);
+    public Collection<Quote> getQuotes(Set<Ticker> tickers) {
+        Collection<Quote> quotes = new ArrayList<>();
+        for (Ticker ticker: tickers) {
+            quotes.add(generateQuote(ticker));
         }
         return quotes;
     }
 
     @Override
-    public Optional<QuoteDetail> getQuote(String ticker) {
-        QuoteDetail quote;
-        if (ticker.equals("GBP"))
-            quote = gbpFxRate;
-        else
-            quote = generateQuote(ticker, ccy());
+    public Collection<Quote> getQuote(Ticker... tickers) {
+        Collection<Quote> quotes = new HashSet<>();
 
-        return Optional.of(quote);
+        for(Ticker ticker: tickers) {
+            if (ticker.getSymbol().equals("GBP"))
+                quotes.add(gbpToUsdFxRate);
+            else
+                quotes.add(generateQuote(ticker));
+        }
+
+        return quotes;
     }
 
-    private QuoteDetail generateQuote(String ticker, String currency) {
-        return new QuoteDetail(ticker, ticker+" Name", rand(100.0), rand(100.0), currency, rand(100.0),
-                rand(100.0), rand(100.0), rand(100.0), String.format("+%s",rand(1.0))+"%",
-                String.format("+%s",rand(1.0)), rand(100.0), rand(100.0), "+1.2%", "-2.3%");
+    private Quote generateQuote(Ticker ticker) {
+        return new Quote(ticker.getSymbol(), ticker.getFullName(), rand(100.0),
+                rand(100.0), rand(1.0), rand(1.0), rand(100.0), rand(100.0));
     }
 
     private String ccy() {

@@ -16,47 +16,77 @@ export class HoldingsComponent implements OnInit {
   public holdings: Holding[] = [];
   private errorMessage: string;
 
+  private showHoldingDetailForm: boolean = false;
+  private editing: boolean = false;
+  private submittedForm = false;
+  private selected: Holding[] = [];
+  private selectedHolding: Holding;
+
   constructor(
     private holdingService: HoldingService,
     private auth: Auth) { }
 
   public ngOnInit() {
     if (this.auth.authenticated()) {
-      this.refreshHoldingsList();
+      this.loadHoldings();
     }
   }
 
-  refreshHoldingsList() {
+  loadHoldings() {
     this.holdingService.getHoldings()
-      // .then(holdings => this.holdings = holdings);
       .subscribe(holdings => {
         let sortedHoldings = holdings.sort(this.tradeDateSort);
-				this.holdings = sortedHoldings;
+        this.holdings = sortedHoldings;
       },
       error => this.errorMessage = <any>error);
+  }
+
+	editHolding() {
+		this.selectedHolding = this.selected[0];
+		this.showHoldingDetailForm = true;
+		this.editing = true;
+	}
+
+	onSelect({ selected }) {
+    console.log('Select Event', this.selected);
+  }
+
+  saveHolding(holding: Holding) {
+    if (this.editing) {
+      this.holdingService.updateHolding(holding)
+        .subscribe(
+        holding => this.holdings.push(holding),
+        error => this.errorMessage = <any>error
+        );
+				this.showHoldingDetailForm = false;
+    }
+    else {
+      this.holdingService.create(holding)
+        .subscribe(
+        holding => this.holdings.push(holding),
+        error => this.errorMessage = <any>error
+        );
+    }
   }
 
   delete(holding: Holding): void {
     this.holdingService
       .delete(holding.id)
-      // .then(() => {
-      //   this.holdings = this.holdings.filter(h => h != holding);
-      // });
       .subscribe(() => {
         this.holdings = this.holdings.filter(h => h != holding);
       },
       error => this.errorMessage = <any>error);
   }
 
-	private tradeDateSort(h1: Holding, h2: Holding) {
-		if (h1.tradeDate > h2.tradeDate) {
-			return -1;
-		}
+  private tradeDateSort(h1: Holding, h2: Holding) {
+    if (h1.tradeDate > h2.tradeDate) {
+      return -1;
+    }
 
-		if  (h1.tradeDate < h2.tradeDate) {
-			return 1;
-		}
+    if (h1.tradeDate < h2.tradeDate) {
+      return 1;
+    }
 
-		return 0;
-	}
+    return 0;
+  }
 }
