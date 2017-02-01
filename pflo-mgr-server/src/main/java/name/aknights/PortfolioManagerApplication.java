@@ -11,6 +11,7 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import name.aknights.config.PortfolioManagerConfiguration;
 import name.aknights.core.BasicAuthenticator;
+import name.aknights.core.auth.BasicAuthorizer;
 import name.aknights.core.auth.User;
 import name.aknights.db.MongoModule;
 import name.aknights.module.AuthModule;
@@ -71,6 +72,7 @@ public class PortfolioManagerApplication extends Application<PortfolioManagerCon
                         .setJwtConsumer(component.getJwtConsumer())
                         .setRealm("realm")
                         .setPrefix("Bearer")
+                        .setAuthorizer(new BasicAuthorizer())
                         .setAuthenticator(new BasicAuthenticator())
                         .buildAuthFilter());
 

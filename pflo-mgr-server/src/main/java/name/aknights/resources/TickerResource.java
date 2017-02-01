@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -70,7 +71,7 @@ public class TickerResource {
     }
 
     @POST
-    @PermitAll
+    @RolesAllowed("ADMIN")
     @Timed
     public Response addTicker(@NotNull Ticker ticker, @Context HttpServletRequest request, @Auth Principal principal) {
         logger.debug("addTicker() - ticker = {}", ticker);
@@ -81,7 +82,7 @@ public class TickerResource {
 
     @PUT
     @Path("/{uuid}")
-    @PermitAll
+    @RolesAllowed("ADMIN")
     @Timed
     public Response updateTicker(@PathParam("uuid") String uuid, @NotNull @Valid Ticker ticker, @Auth Principal principal) {
         if (uuid == null || uuid.trim().length() == 0) {

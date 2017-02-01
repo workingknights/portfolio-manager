@@ -1,6 +1,7 @@
 package name.aknights.core;
 
 import io.dropwizard.auth.Authenticator;
+import name.aknights.core.auth.Role;
 import name.aknights.core.auth.User;
 import org.jose4j.jwt.MalformedClaimException;
 import org.jose4j.jwt.consumer.JwtContext;
@@ -22,7 +23,13 @@ public class BasicAuthenticator implements Authenticator<JwtContext, User> {
 
         try {
             final String subject = context.getJwtClaims().getSubject();
-            return Optional.of(new User(subject));
+            Role role;
+            if (subject.equals("google-oauth2|118300408301077615291"))
+                role = Role.ADMIN;
+            else
+                role = Role.CLIENT;
+
+            return Optional.of(new User(subject, role));
         }
         catch (MalformedClaimException e) { return Optional.empty(); }
     }
