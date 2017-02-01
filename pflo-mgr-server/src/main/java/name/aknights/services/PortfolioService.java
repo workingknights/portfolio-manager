@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import javax.sound.sampled.Port;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -50,7 +49,7 @@ public class PortfolioService {
 
     Portfolio getBasicPortfolio(String userId) {
 //        long start = System.currentTimeMillis();
-        Collection<Holding> holdings = holdingsService.allHoldings();
+        Collection<Holding> holdings = holdingsService.getHoldings(userId);
 //        logger.debug("retrieve Holdings took {} ms", System.currentTimeMillis() - start);
 
 //        start = System.currentTimeMillis();

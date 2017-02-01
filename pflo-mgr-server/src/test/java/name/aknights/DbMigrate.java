@@ -29,15 +29,13 @@ public class DbMigrate {
         Datastore datastore = provideDatastore(config);
 
         HoldingDAO holdingDAO = new HoldingDAO(datastore);
-        TickerDAO tickerDAO = new TickerDAO(datastore);
+//        TickerDAO tickerDAO = new TickerDAO(datastore);
 
         List<Holding> holdings = holdingDAO.find().asList();
 
         for (Holding holding : holdings) {
-            if (holding.getTicker() != null) {
-//                holding.setSymbol(null);
-                holdingDAO.save(holding);
-            }
+            holding.setUserId("google-oauth2|118300408301077615291");
+            holdingDAO.save(holding);
         }
     }
 

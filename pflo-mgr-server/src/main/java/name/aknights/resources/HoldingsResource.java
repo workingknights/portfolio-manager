@@ -4,7 +4,6 @@ import com.codahale.metrics.annotation.Timed;
 import io.dropwizard.auth.Auth;
 import name.aknights.api.Data;
 import name.aknights.api.Holding;
-import name.aknights.api.Model;
 import name.aknights.api.Ticker;
 import name.aknights.services.HoldingsService;
 import name.aknights.services.TickerService;
@@ -52,7 +51,7 @@ public class HoldingsResource {
     @PermitAll
     @Timed
     public Response listAll(@Auth Principal principal) {
-        return Response.ok(new Data<>(holdingsService.allHoldings())).build();
+        return Response.ok(new Data<>(holdingsService.getHoldings(principal.getName()))).build();
     }
 
     @GET
@@ -83,6 +82,7 @@ public class HoldingsResource {
             return Response.status(Response.Status.NOT_FOUND).entity(msg).build();
         }
         newHolding.setTicker(tickerOptional.get()); // Set retrieved ticker on holding so that ticker ID is not null
+        newHolding.setUserId(principal.getName());
 
         String uuid = holdingsService.addNewHolding(newHolding);
         URI location = UriBuilder.fromPath(request.getRequestURI()).path(uuid).build();

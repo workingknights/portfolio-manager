@@ -22,8 +22,8 @@ public class HoldingsService {
         this.fxRatesService = fxRatesService;
     }
 
-    public Collection<Holding> allHoldings() {
-        Collection<Holding> holdings = holdingDAO.getHoldings();
+    public Collection<Holding> getHoldings(String userId) {
+        Collection<Holding> holdings = holdingDAO.getHoldings(userId);
 
         for (Holding holding: holdings) {
             long start = System.currentTimeMillis();

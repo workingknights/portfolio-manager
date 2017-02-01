@@ -17,6 +17,8 @@ public class Holding {
     @Id
     private ObjectId id;
 
+    private String userId;
+
     @Reference
     private Ticker ticker;
 
@@ -57,6 +59,14 @@ public class Holding {
     @JsonProperty
     public void setId(String id) {
         this.id = (id == null || id.isEmpty()) ? null : new ObjectId(id);
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     @JsonProperty

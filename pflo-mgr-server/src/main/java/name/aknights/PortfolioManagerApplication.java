@@ -89,7 +89,7 @@ public class PortfolioManagerApplication extends Application<PortfolioManagerCon
         environment.jersey().register(component.getSandboxResource());
         environment.jersey().register(component.getTickerResource());
 
-        environment.jersey().register(LogRequestFeature.class);
+//        environment.jersey().register(LogRequestFeature.class);
 
         environment.healthChecks().register("MongoHealthCheck", component.getMongoHealthCheck());
 
