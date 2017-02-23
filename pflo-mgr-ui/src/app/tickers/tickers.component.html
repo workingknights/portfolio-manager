@@ -18,18 +18,18 @@
 
 		<div class="row">
 			<div class="col-lg-10 col-sm-12 col-xs-12">
-				<swui-datatable class="material"
+				<ngx-datatable class="material"
 					[rows]="tickers"
 					[columnMode]="'flex'"
 					[rowHeight]="'auto'"
 					[selected]="selected"
           [selectionType]="'single'"
           (select)='onSelect($event)'>
-					<swui-datatable-column prop="symbol" [flexGrow]="1.3"></swui-datatable-column>
-					<swui-datatable-column prop="currency" [flexGrow]="1.4"></swui-datatable-column>
-					<swui-datatable-column prop="exchange" [flexGrow]="1.8"></swui-datatable-column>
-					<swui-datatable-column prop="fullName" [flexGrow]="5"></swui-datatable-column>
-				</swui-datatable>
+					<ngx-datatable-column prop="symbol" [flexGrow]="1.3"></ngx-datatable-column>
+					<ngx-datatable-column prop="currency" [flexGrow]="1.4"></ngx-datatable-column>
+					<ngx-datatable-column prop="exchange" [flexGrow]="1.8"></ngx-datatable-column>
+					<ngx-datatable-column prop="fullName" [flexGrow]="5"></ngx-datatable-column>
+				</ngx-datatable>
 			</div>
 		</div>
 	</div>

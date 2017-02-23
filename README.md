@@ -11,3 +11,11 @@ Health Check
 ---
 
 To see your applications health enter url `http://localhost:8081/healthcheck`
+
+
+How to run locally
+---
+1. launch local mongodb instance:   *mongod --dbpath=<path to db dir>*
+
+
+1. launch app server in test mode  

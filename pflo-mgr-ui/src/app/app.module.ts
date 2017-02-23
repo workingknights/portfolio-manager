@@ -5,7 +5,7 @@ import { HttpModule, Http, RequestOptions } from '@angular/http';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
-import { Angular2DataTableModule } from 'angular2-data-table';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 import { AUTH_PROVIDERS } from 'angular2-jwt';
 import { AuthHttp, AuthConfig } from 'angular2-jwt';
@@ -58,7 +58,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     FormsModule,
     HttpModule,
     AppRoutingModule,
-    Angular2DataTableModule,
+    NgxDatatableModule,
     NgbModule.forRoot(),
   ],
   providers: [
@@ -70,7 +70,6 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
 		Auth,
 		Utils,
     AuthGuard,
-    AUTH_PROVIDERS,
     {
       provide: AuthHttp,
       useFactory: authHttpServiceFactory,

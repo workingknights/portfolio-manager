@@ -20,7 +20,8 @@ public class DbMigrate {
 
     public static void main(String[] args) {
         DbMigrate migrator = new DbMigrate();
-        DbConfiguration config = new DbConfiguration("heroku_n91f12d8", 27968, "ds127968.mlab.com", "heroku_n91f12d8", args[0]);
+        DbConfiguration config = new DbConfiguration("pflomgr", 27017, "localhost", "pflomgr", args[0]);
+//        DbConfiguration config = new DbConfiguration("heroku_n91f12d8", 27968, "ds127968.mlab.com", "heroku_n91f12d8", args[0]);
 
         migrator.run(config);
     }

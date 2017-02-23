@@ -41,51 +41,51 @@
 
 	<div class="row">
 		<div class="col-sm-12">
-			<swui-datatable
+			<ngx-datatable
 				[rows]="portfolioEntries"
 				[columnMode]="'flex'"
 				[rowHeight]="'auto'"
 				[scrollbarH]="true"
 				class="material">
-				<swui-datatable-column prop="ticker" [flexGrow]="0.9">
-					<template let-value="value" swui-datatable-cell-template>
+				<ngx-datatable-column prop="ticker" [flexGrow]="0.9">
+					<template let-value="value" ngx-datatable-cell-template>
 						<a [routerLink]="['/portfolioEntry', value]">{{value}}</a>
 					</template>
-				</swui-datatable-column>
-        <swui-datatable-column name="Shares" prop="totalShares" [flexGrow]="0.7"></swui-datatable-column>
-				<swui-datatable-column name="B/S" prop="recommendation.direction" [flexGrow]="0.7">
-					<template let-value="value" swui-datatable-cell-template>
+				</ngx-datatable-column>
+        <ngx-datatable-column name="Shares" prop="totalShares" [flexGrow]="0.7"></ngx-datatable-column>
+				<ngx-datatable-column name="B/S" prop="recommendation.direction" [flexGrow]="0.7">
+					<template let-value="value" ngx-datatable-cell-template>
 						<span [ngClass]="{greenCell: value === 'BUY', redCell: value === 'SELL'}">{{value}}</span>
 					</template>
-				</swui-datatable-column>
-        <swui-datatable-column name="Curr Price" prop="currPrice" [flexGrow]="0.8">
-					<template let-value="value" swui-datatable-cell-template>
+				</ngx-datatable-column>
+        <ngx-datatable-column name="Curr Price" prop="currPrice" [flexGrow]="0.8">
+					<template let-value="value" ngx-datatable-cell-template>
 						<div>{{value | number:'1.2-2'}}</div>
 					</template>
-				</swui-datatable-column>
-				<swui-datatable-column name="Total % Gain" prop="totalPercentGain" [flexGrow]="0.9">
-					<template let-value="value" swui-datatable-cell-template>
+				</ngx-datatable-column>
+				<ngx-datatable-column name="Total % Gain" prop="totalPercentGain" [flexGrow]="0.9">
+					<template let-value="value" ngx-datatable-cell-template>
 						<div style="text-align:right">
 							<span [ngClass]="{greenCell: value > 0, redCell: value < 0}">{{value | percent:'1.2-2'}}</span>
 						</div>
 					</template>
-				</swui-datatable-column>
-				<swui-datatable-column name="% Change" prop="percentChange" [flexGrow]="0.9">
-					<template let-value="value" swui-datatable-cell-template>
+				</ngx-datatable-column>
+				<ngx-datatable-column name="% Change" prop="percentChange" [flexGrow]="0.9">
+					<template let-value="value" ngx-datatable-cell-template>
 						<span [ngClass]="{greenCell: value > 0, redCell: value < 0}">{{value | percent:'1.2-2'}}</span>
 					</template>
-				</swui-datatable-column>
-        <swui-datatable-column name="Market Val (Base)" prop="marketValueBase" [flexGrow]="1.3" >
-					<template let-value="value" swui-datatable-cell-template>
+				</ngx-datatable-column>
+        <ngx-datatable-column name="Market Val (Base)" prop="marketValueBase" [flexGrow]="1.3" >
+					<template let-value="value" ngx-datatable-cell-template>
 						{{value | currency:'USD':true}}
 					</template>
-				</swui-datatable-column>
-				<swui-datatable-column name="Rebal" prop="rebalToModel" [flexGrow]="1.1" >
-					<template let-value="value" swui-datatable-cell-template>
+				</ngx-datatable-column>
+				<ngx-datatable-column name="Rebal" prop="rebalToModel" [flexGrow]="1.1" >
+					<template let-value="value" ngx-datatable-cell-template>
 						<span [ngClass]="{greenCell: value > 0, redCell: value < 0}">{{value | currency:'USD':true}}</span>
 					</template>
-				</swui-datatable-column>
-			</swui-datatable>
+				</ngx-datatable-column>
+			</ngx-datatable>
 		</div>
 	</div>
 
