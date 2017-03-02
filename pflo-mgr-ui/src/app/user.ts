@@ -1,3 +1,5 @@
+import { ModelEntry } from './model';
+
 export class User {
 	constructor(
 		public userId: string,

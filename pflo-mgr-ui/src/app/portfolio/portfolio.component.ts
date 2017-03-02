@@ -37,7 +37,7 @@ export class PortfolioComponent implements OnInit {
     }
   }
 
-  saveHolding(holding) {
+  saveHolding(holding: any) {
 		console.log('Portfolio:saveHolding() - holding = ', holding);
     this.holdingService.create(holding)
       .subscribe(holding => {

@@ -12,11 +12,11 @@ import { AuthGuard } from './auth.guard';
 
 const routes: Routes = [
   { path: 'portfolio', component: PortfolioComponent },
-  { path: 'holdings', component: HoldingsComponent, canActivate: [AuthGuard] },
-  { path: 'model', component: ModelComponent, canActivate: [AuthGuard] },
-  { path: 'tickers', component: TickersComponent, canActivate: [AuthGuard] },
-  { path: 'sandbox', component: SandboxComponent, canActivate: [AuthGuard] },
-  { path: 'portfolioEntry/:ticker', component: PortfolioEntryDetailComponent, canActivate: [AuthGuard] },
+  { path: 'holdings', component: HoldingsComponent }, //, canActivate: [AuthGuard] },
+  { path: 'model', component: ModelComponent }, //, canActivate: [AuthGuard] },
+  { path: 'tickers', component: TickersComponent }, //, canActivate: [AuthGuard] },
+  { path: 'sandbox', component: SandboxComponent }, //, canActivate: [AuthGuard] },
+  { path: 'portfolioEntry/:ticker', component: PortfolioEntryDetailComponent }, //, canActivate: [AuthGuard] },
   { path: '', component: DashboardComponent },
 	{ path: '**', component: DashboardComponent }
 ];

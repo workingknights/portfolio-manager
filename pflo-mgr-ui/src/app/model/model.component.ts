@@ -55,7 +55,7 @@ export class ModelComponent implements OnInit {
       });
   }
 
-  saveEntry(modelEntry) {
+  saveEntry(modelEntry: any) {
     console.log('saving entry: ' + modelEntry);
     this.modelService.addModelEntry(this.model.id, modelEntry)
       .subscribe(

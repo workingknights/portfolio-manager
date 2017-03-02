@@ -47,7 +47,7 @@ export class HoldingsComponent implements OnInit {
 		this.editing = true;
 	}
 
-	onSelect({ selected }) {
+	onSelect({ selected } : any) {
     console.log('Select Event', this.selected);
   }
 

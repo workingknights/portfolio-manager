@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { tokenNotExpired } from 'angular2-jwt';
 
 import { authConfig } from './auth.config';
-import { environment } from '../environments/environment';
+// import { environment } from '../environments/environment';
 
 // Avoid name not found warnings
 declare var Auth0Lock: any;
@@ -11,13 +11,13 @@ declare var Auth0Lock: any;
 @Injectable()
 export class Auth {
 
-  private lock;
+  private lock: any;
 
   // Store profile object in auth class
   private userProfile: Object;
 
   constructor(private router: Router) {
-    if (environment.production) {
+    if (process.env.ENV === 'production') {
       // Configure Auth0
       this.lock = new Auth0Lock(authConfig.clientID, authConfig.domain, {});
 
@@ -25,11 +25,11 @@ export class Auth {
       this.userProfile = JSON.parse(localStorage.getItem('profile'));
 
       // Add callback for lock `authenticated` event
-      this.lock.on('authenticated', (authResult) => {
+      this.lock.on('authenticated', (authResult: any) => {
         localStorage.setItem('id_token', authResult.idToken);
 
         // Fetch profile information
-        this.lock.getProfile(authResult.idToken, (error, profile) => {
+        this.lock.getProfile(authResult.idToken, (error: any, profile: any) => {
           if (error) {
             console.log(error);
           }
@@ -45,11 +45,11 @@ export class Auth {
 
   public login() {
     // Call the show method to display the widget.
-    if (environment.production) {
+		if (process.env.ENV === 'production') {
       this.lock.show();
     }
     else {
-      localStorage.setItem('id_token', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJnb29nbGUtb2F1dGgyfDExODMwMDQwODMwMTA3NzYxNTI5MSIsImF1ZCI6IlQySFFVeFNVWFh1dGQxcmlnV3BVdmRFT05rZDVzMWdtIiwiaXNzIjoiaHR0cHM6Ly93b3JraW5na25pZ2h0cy5hdXRoMC5jb20vIiwiZXhwIjoxNDg4Mjk0MDAwLCJpYXQiOjE0ODMxOTY0MDB9.qdDMHPjNKjL-W_khcUwZiSYty-Q_bt0l5YWr3c0-GaU');
+      localStorage.setItem('id_token', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJnb29nbGUtb2F1dGgyfDExODMwMDQwODMwMTA3NzYxNTI5MSIsImF1ZCI6IlQySFFVeFNVWFh1dGQxcmlnV3BVdmRFT05rZDVzMWdtIiwiaXNzIjoiaHR0cHM6Ly93b3JraW5na25pZ2h0cy5hdXRoMC5jb20vIiwiZXhwIjoxNTc3ODA0NDAwLCJpYXQiOjE0ODMxOTY0MDB9.WutOBkyCKlPFq3AOKAQaTSJkil97jKOzgNbViTdqrTs');
     }
     console.log('login() called.  authenticated = ' + tokenNotExpired());
   }

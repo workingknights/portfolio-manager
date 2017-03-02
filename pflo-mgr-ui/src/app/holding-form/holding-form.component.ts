@@ -53,7 +53,7 @@ export class HoldingFormComponent {
 	    }
 	}
 
-  get tradeDate() {
+  get tradeDate(): any {
     return this.tradeDate.toISOString().substring(0, 10);
   }
 }

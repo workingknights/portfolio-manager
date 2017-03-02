@@ -56,7 +56,7 @@ export class TickersComponent implements OnInit {
     }
   }
 
-  onSelect({ selected }) {
+  onSelect({ selected } : any) {
     console.log('Select Event', this.selected);
   }
 
