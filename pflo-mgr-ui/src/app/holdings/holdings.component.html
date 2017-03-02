@@ -18,34 +18,34 @@
 
 		<div class="row">
 			<div class="col-sm-12">
-				<swui-datatable class="material"
+				<ngx-datatable class="material"
 					[rows]="holdings"
 					[columnMode]="'flex'"
 					[rowHeight]="'auto'"
 					[selected]="selected"
 					[selectionType]="'single'"
 					(select)='onSelect($event)'>
-					<swui-datatable-column name="Ticker" prop="ticker.symbol" [flexGrow]="0.7"></swui-datatable-column>
-					<swui-datatable-column name="Currency" prop="ticker.currency" [flexGrow]="0.8"></swui-datatable-column>
-					<swui-datatable-column prop="tradeDate" [flexGrow]="0.9">
-						<template let-value="value" swui-datatable-cell-template>
+					<ngx-datatable-column name="Ticker" prop="ticker.symbol" [flexGrow]="0.7"></ngx-datatable-column>
+					<ngx-datatable-column name="Currency" prop="ticker.currency" [flexGrow]="0.8"></ngx-datatable-column>
+					<ngx-datatable-column prop="tradeDate" [flexGrow]="0.9">
+						<template let-value="value" ngx-datatable-cell-template>
 							{{value | date:'d/MM/y'}}
 						</template>
-					</swui-datatable-column>
-					<swui-datatable-column prop="shares" [flexGrow]="0.7"></swui-datatable-column>
-					<swui-datatable-column prop="tradePrice" [flexGrow]="0.9"></swui-datatable-column>
-					<swui-datatable-column prop="commission" [flexGrow]="0.9"></swui-datatable-column>
-					<swui-datatable-column prop="initialMarketValue" [flexGrow]="1.3">
-						<template let-value="value" swui-datatable-cell-template>
+					</ngx-datatable-column>
+					<ngx-datatable-column prop="shares" [flexGrow]="0.7"></ngx-datatable-column>
+					<ngx-datatable-column prop="tradePrice" [flexGrow]="0.9"></ngx-datatable-column>
+					<ngx-datatable-column prop="commission" [flexGrow]="0.9"></ngx-datatable-column>
+					<ngx-datatable-column prop="initialMarketValue" [flexGrow]="1.3">
+						<template let-value="value" ngx-datatable-cell-template>
 							{{value.toFixed(2)}}
 						</template>
-					</swui-datatable-column>
-					<swui-datatable-column prop="initialMarketValueBase" [flexGrow]="1.6">
-						<template let-value="value" swui-datatable-cell-template>
+					</ngx-datatable-column>
+					<ngx-datatable-column prop="initialMarketValueBase" [flexGrow]="1.6">
+						<template let-value="value" ngx-datatable-cell-template>
 							{{value | currency:'USD':true}}
 						</template>
-					</swui-datatable-column>
-				</swui-datatable>
+					</ngx-datatable-column>
+				</ngx-datatable>
 			</div>
 		</div>
 

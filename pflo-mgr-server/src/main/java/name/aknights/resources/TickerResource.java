@@ -47,7 +47,6 @@ public class TickerResource {
     }
 
     @GET
-    @PermitAll
     @Timed
     public Response getAllTickers(@Auth Principal principal) {
         Collection<Ticker> tickers = tickerService.allTickers();

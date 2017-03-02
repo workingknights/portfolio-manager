@@ -3,7 +3,13 @@ import { BrowserModule }  from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpModule, Http, RequestOptions } from '@angular/http';
 
+<<<<<<< HEAD
 import { Angular2DataTableModule } from 'angular2-data-table';
+=======
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+>>>>>>> 1848f096117377c74de7c70a490062b6872a6199
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -56,7 +62,14 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     ModelEntryFormComponent,
     SandboxComponent,
     TickersComponent,
-    TickerDetailFormComponent
+    TickerDetailFormComponent,
+  ],
+  imports: [
+    BrowserModule,
+    FormsModule,
+    HttpModule,
+    AppRoutingModule,
+    NgxDatatableModule
   ],
 	providers: [
 		HoldingService,
@@ -66,7 +79,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
 		TickerService,
 		Utils,
 		Auth,
-		{
+    {
       provide: AuthHttp,
       useFactory: authHttpServiceFactory,
       deps: [Http, RequestOptions]
